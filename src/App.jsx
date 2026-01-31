@@ -1,13 +1,17 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
+import EmailActivate from './pages/EmailActivate.jsx';
 
 function App() {
     const [inputValue, setInputValue] = useState('');
-    const [shortToken, setShortToken] = useState(null);
     const [loading, setLoading] = useState(false);
-    const shortTokenRef = useRef(null);
 
     // Предполагаемый URL для привязки — при необходимости замените на нужный
     const BIND_URL = 'http://127.0.0.1/api/v1/accounts/tg/token/short/';
+
+    // Если текущий путь - страница активации email, показываем отдельный компонент
+    if (typeof window !== 'undefined' && window.location.pathname === '/email/activate') {
+        return <EmailActivate />;
+    }
 
     useEffect(() => {
         const script = document.createElement('script');
@@ -57,9 +61,6 @@ function App() {
             if (!token) {
                 throw new Error('Получен пустой токен от сервера');
             }
-
-            setShortToken(token);
-            shortTokenRef.current = token;
 
             const url = `https://t.me/socialpulsesandboxbot?start=${encodeURIComponent(token)}`;
             // Открываем ссылку в новой вкладке

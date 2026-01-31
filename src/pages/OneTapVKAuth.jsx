@@ -1,0 +1,1 @@
+import React, { Config, OneTap } from '@vkid/sdk';
