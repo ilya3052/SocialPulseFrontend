@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 // Компонент страницы активации по ссылке /email/activate?token=...
 // Предположение: endpoint для активации
-const ACTIVATE_URL = 'http://127.0.0.1/api/v1/accounts/email/activate/';
+const ACTIVATE_URL = `${import.meta.env.VITE_API_BASE_URL}/${import.meta.env.VITE_API_VERSION}/email/activate/`;
 
 export default function EmailActivate() {
   const [token, setToken] = useState(null);

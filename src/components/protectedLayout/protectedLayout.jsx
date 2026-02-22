@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import {sendForDebug} from "../../utils/utils.js";
 
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_VERSION = import.meta.env.VITE_API_VERSION;
+
 export default function ProtectedLayout() {
     const [checking, setChecking] = useState(true);
     const [isAuth, setIsAuth] = useState(false);
@@ -23,7 +26,7 @@ export default function ProtectedLayout() {
             }
 
             try {
-                const verifyAccessRes = await fetch('https://socialpulse.sandbox.com/api/v2/accounts/token/verify/', {
+                const verifyAccessRes = await fetch(`${BASE_URL}/${API_VERSION}/accounts/token/verify/`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ token: access }),
@@ -36,7 +39,7 @@ export default function ProtectedLayout() {
                     }
                 }
 
-                const verifyRefreshRes = await fetch('https://socialpulse.sandbox.com/api/v2/accounts/token/verify/', {
+                const verifyRefreshRes = await fetch(`${BASE_URL}/${API_VERSION}/accounts/token/verify/`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ token: refresh }),
@@ -48,12 +51,11 @@ export default function ProtectedLayout() {
                         localStorage.removeItem('refresh_token');
                         setIsAuth(false);
                     }
-                    // Отправляем текст ответа для отладки
-                    await sendForDebug(verifyRefreshRes.text());
+
                     return;
                 }
 
-                const refreshRes = await fetch('https://socialpulse.sandbox.com/api/v2/accounts/token/refresh/', {
+                const refreshRes = await fetch(`${BASE_URL}/${API_VERSION}/accounts/token/refresh/`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${refresh}` },
                     body: JSON.stringify({ refresh: refresh }),
@@ -75,11 +77,8 @@ export default function ProtectedLayout() {
                 }
 
             } catch (err) {
-                // Логируем ошибку и очищаем токены
                 await sendForDebug(err);
                 localStorage.clear();
-                // localStorage.removeItem('access_token');
-                // localStorage.removeItem('refresh_token');
                 if (!aborted) {
                     setIsAuth(false);
                 }
