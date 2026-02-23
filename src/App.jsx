@@ -1,26 +1,33 @@
 import { BrowserRouter as Router, Link, Routes, Route } from 'react-router-dom';
 import EmailActivate from './pages/EmailActivate.jsx';
 import LoginForm from './components/login/Login.jsx';
-import Profile from './components/profile/Profile.jsx';
+import ProfileSection from './components/profile/ProfileSection.jsx';
 import * as VKID from '@vkid/sdk';
 
 import RegistrationForm from "./components/registration/Registration.jsx";
 import ProtectedLayout from "./components/protectedLayout/protectedLayout.jsx";
+import Header from "./components/header/Header.jsx";
+import Footer from "./components/footer/Footer.jsx";
 
 const App = () => {
     return (
-        <Router>
-            <Routes>
-                <Route path="/registration" element={<RegistrationForm />} />
-                <Route path="/login" element={<LoginForm />}/>
+        <div className="app">
+            <Header />
+            <main className="main">
+                    <Routes>
+                        <Route path="/registration" element={<RegistrationForm />} />
+                        <Route path="/login" element={<LoginForm />}/>
 
-                <Route element={<ProtectedLayout/>}>
-                    <Route path="/" element={<Profile />} />
-                    <Route path="/profile" element={<Profile />} />
-                </Route>
+                        <Route element={<ProtectedLayout/>}>
+                            <Route path="/" element={<ProfileSection />} />
+                            <Route path="/profile" element={<ProfileSection />} />
+                        </Route>
 
-            </Routes>
-        </Router>
+                    </Routes>
+            </main>
+            <Footer />
+        </div>
+
     )
 }
 

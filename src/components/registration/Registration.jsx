@@ -12,6 +12,7 @@ const API_VERSION = import.meta.env.VITE_API_VERSION;
 const RegistrationForm = () => {
     const [formData, setFormData] = useState({
         username: '',
+        email: '',
         password: '',
         password2: ''
     });
@@ -92,6 +93,20 @@ const RegistrationForm = () => {
                         value={formData.username}
                         onChange={handleChange}
                         placeholder="Введите username"
+                        required
+                        className={styles.formControl}
+                    />
+                </div>
+
+                <div className={styles.formGroup}>
+                    <label htmlFor="email">Email</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="Введите email"
                         required
                         className={styles.formControl}
                     />

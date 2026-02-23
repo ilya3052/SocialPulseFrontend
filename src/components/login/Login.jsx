@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 import styles from "./login.module.css";
 import * as VKID from "@vkid/sdk";
@@ -18,6 +19,9 @@ const LoginForm = () => {
 
     const navigate = useNavigate();
 
+    const [authError, setAuthError] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+
     useEffect(() => {
         const cleanup = initializeTelegramWidget(createTGAuthHandler(navigate));
         return cleanup;
@@ -29,6 +33,9 @@ const LoginForm = () => {
             ...prev,
             [name]: value
         }));
+        if (authError) {
+            setAuthError(false);
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -53,8 +60,8 @@ const LoginForm = () => {
             await sendForDebug(err);
         }
         else if (result.status === 401) {
-            const err = await result.text();
-            await sendForDebug(err);
+            setAuthError(true);
+            await sendForDebug(await result.text());
         }
     }
 
@@ -78,23 +85,46 @@ const LoginForm = () => {
                         onChange={handleChange}
                         placeholder="Введите username"
                         required
+                        className={authError ? styles.inputError : ""}
                     />
                 </div>
 
                 <div className={styles.formGroup}>
                     <label htmlFor="password">Пароль</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        placeholder="Введите пароль"
-                        required
-                    />
+
+                    <div className={styles.passwordWrapper}>   {/* ← вот этот div обязателен! */}
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            id="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            placeholder="Введите пароль"
+                            required
+                            className={`${authError ? styles.inputError : ""} ${styles.passwordInput}`}
+                        />
+                        <button
+                            type="button"
+                            className={styles.togglePassword}
+                            onClick={() => setShowPassword(prev => !prev)}
+                            tabIndex={-1}
+                        >
+                            {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+                        </button>
+                    </div>
+
+                    {authError && (
+                        <div className={styles.errorMessage}>
+                            Неверный логин или пароль
+                        </div>
+                    )}
                 </div>
 
-
+                <div className={styles.passwordActions}>
+                    <Link to="/reset" className={styles.forgotPassword}>
+                        Забыли пароль?
+                    </Link>
+                </div>
                 <button type="submit" className={styles.loginBtn}>
                     Войти
                 </button>
