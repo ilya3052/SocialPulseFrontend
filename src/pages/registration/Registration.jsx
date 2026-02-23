@@ -1,10 +1,10 @@
 import {useEffect, useState} from "react";
-import {sendForDebug} from "../../utils/utils.js";
+import {sendForDebug} from '../../utils/utils.js';
 import styles from "./registration.module.css";
 import * as VKID from "@vkid/sdk";
 import {useNavigate} from "react-router-dom";
-import { initializeVKID, createVKAuthSuccessHandler } from "../../pages/OneTapVKAuth.jsx";
-import { initializeTelegramWidget, createTGAuthHandler } from "../../pages/TGAuth.jsx";
+import { initializeVKID, createVKAuthSuccessHandler } from "../../utils/OneTapVKAuth.jsx";
+import { initializeTelegramWidget, createTGAuthHandler } from "../../utils/TGAuth.jsx";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const API_VERSION = import.meta.env.VITE_API_VERSION;
@@ -33,8 +33,6 @@ const RegistrationForm = () => {
         const cleanup = initializeVKID(createVKAuthSuccessHandler(navigate));
         return cleanup;
     }, [navigate]);
-
-
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -155,7 +153,7 @@ const RegistrationForm = () => {
                 </div>
 
                 <p className={styles.loginLink}>
-                    Уже зарегистрированы? <a href="/login">Войти</a>
+                    Уже зарегистрированы? <a href="/login/Login">Войти</a>
                 </p>
             </form>
         </div>

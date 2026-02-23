@@ -1,5 +1,5 @@
 import * as VKID from '@vkid/sdk';
-import { sendForDebug } from '../utils/utils.js';
+import { sendForDebug } from './utils.js';
 
 /**
  * Обмен code и deviceId на VK токены

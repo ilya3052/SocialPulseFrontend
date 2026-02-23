@@ -1,4 +1,4 @@
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import styles from "./header.module.css";
 import {useEffect, useRef, useState} from "react";
 
@@ -10,6 +10,7 @@ const Header = () => {
         setIsOpen(prev => !prev);
     };
 
+    const navigate = useNavigate();
 
     // Закрытие при клике вне области
     useEffect(() => {

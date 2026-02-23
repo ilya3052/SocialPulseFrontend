@@ -1,10 +1,6 @@
 /* RegistrationForm.module.css */
 
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-}
+
 
 .registrationContainer {
     display: flex;

@@ -4,9 +4,9 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 
 import styles from "./login.module.css";
 import * as VKID from "@vkid/sdk";
-import {sendForDebug} from "../../utils/utils.js";
-import { initializeVKID, createVKAuthSuccessHandler } from "../../pages/OneTapVKAuth.jsx";
-import { initializeTelegramWidget, createTGAuthHandler } from "../../pages/TGAuth.jsx";
+import {sendForDebug} from '../../utils/utils.js';
+import { initializeVKID, createVKAuthSuccessHandler } from "../../utils/OneTapVKAuth.jsx";
+import { initializeTelegramWidget, createTGAuthHandler } from "../../utils/TGAuth.jsx";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const API_VERSION = import.meta.env.VITE_API_VERSION;

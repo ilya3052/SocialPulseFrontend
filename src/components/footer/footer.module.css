@@ -2,13 +2,17 @@
     background: #333;
     color: white;
     text-align: center;
-    padding: 1.5rem 1rem;
-    margin-top: auto; /* важно для layout */
+    padding: 1.5rem 0;           /* убрали боковые padding */
+    margin-top: auto;
+    width: 100%;                  /* на всякий случай */
 }
 
+/* убираем боковые отступы у контента внутри футера */
 .footerContent {
     max-width: 1200px;
     margin: 0 auto;
     font-size: 0.95rem;
     opacity: 0.9;
+    padding: 0 1rem;              /* ← если очень хочется небольшие отступы на мобильных — можно оставить */
+    /* или полностью убрать: padding: 0; */
 }

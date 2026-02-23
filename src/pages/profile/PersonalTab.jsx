@@ -1,6 +1,7 @@
 import styles from './profile.module.css';
 
 const PersonalTab = () => {
+
     return (
         <div className={styles.tabContent}>
             <div className={styles.profileBlock}>
