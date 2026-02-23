@@ -1,6 +1,10 @@
 import {Link, useNavigate} from "react-router-dom";
 import styles from "./header.module.css";
 import {useEffect, useRef, useState} from "react";
+import {sendForDebug} from "../../utils/utils.js";
+
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_VERSION = import.meta.env.VITE_API_VERSION;
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -11,6 +15,24 @@ const Header = () => {
     };
 
     const navigate = useNavigate();
+
+    const logout = async () => {
+        const res = await fetch(`${BASE_URL}/${API_VERSION}/accounts/token/blacklist/`, {
+            method: "POST" ,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ refresh: localStorage.getItem("refresh_token") }),
+        });
+        if (res.ok) {
+            localStorage.clear();
+        }
+        else if (res.status === 400) {
+            const err = await res.text();
+            await sendForDebug(err);
+        }
+        navigate("/login", { replace: true });
+    }
 
     // Закрытие при клике вне области
     useEffect(() => {
@@ -68,11 +90,7 @@ const Header = () => {
 
                                 <button
                                     className={`${styles.dropdownItem} ${styles.logoutBtn}`}
-                                    onClick={() => {
-                                        localStorage.clear();
-                                        setIsOpen(false);
-                                        navigate("/login", { replace: true });
-                                    }}
+                                    onClick={logout}
                                 >
                                     Выйти
                                 </button>
