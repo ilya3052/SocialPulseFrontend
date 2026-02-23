@@ -1,0 +1,14 @@
+.footer {
+    background: #333;
+    color: white;
+    text-align: center;
+    padding: 1.5rem 1rem;
+    margin-top: auto; /* важно для layout */
+}
+
+.footerContent {
+    max-width: 1200px;
+    margin: 0 auto;
+    font-size: 0.95rem;
+    opacity: 0.9;
+}
