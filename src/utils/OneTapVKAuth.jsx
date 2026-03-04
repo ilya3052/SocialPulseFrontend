@@ -1,5 +1,5 @@
 import * as VKID from '@vkid/sdk';
-import { sendForDebug } from './utils.js';
+import {sendForDebug} from './utils.js';
 
 /**
  * Обмен code и deviceId на VK токены
@@ -36,21 +36,30 @@ export const sendExchangedCodes = async (tokens) => {
         throw new Error(`Бэкенд: ${res.status} — ${errText}`);
     }
 
-    const backendData = await res.json();
+    return await res.json();
 
-    const access_token = backendData.request.access_token;
-    const refresh_token = backendData.request.refresh_token;
-    const vk_id = backendData.request.vk_id;
-
-    localStorage.setItem('access_token', access_token);
-    localStorage.setItem('refresh_token', refresh_token);
-    localStorage.setItem('vk_id', vk_id);
 };
+
+export const sendBindingCallback = async () => {
+    const vk_token = localStorage.getItem('vk_access_token');
+    const access_token = localStorage.getItem('access_token');
+    const res = await fetch(`${BASE_URL}/${API_VERSION}/accounts/vk/user/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' , 'Authorization': `Bearer ${access_token}` },
+        body: JSON.stringify({
+            vk_token: vk_token,
+        }),
+    });
+    if (!res.ok) {
+        const errText = await res.text();
+        await sendForDebug(errText);
+    }
+}
 
 /**
  * Инициализация VKID OneTap и настройка обработчика успешной авторизации
  */
-export const initializeVKID = (onSuccess) => {
+export const initializeVKID = (onSuccess, type) => {
     VKID.Config.init({
         app: 54438538,
         redirectUrl: 'https://socialpulse.sandbox.com',
@@ -62,14 +71,30 @@ export const initializeVKID = (onSuccess) => {
     const oneTap = new VKID.OneTap();
     const container = document.getElementById('vkAuth');
 
+    let styles;
+    let skin;
+
+    if (type === "primary") {
+        styles = {
+            width: 240,
+            height: 40,
+        };
+        skin = 'default';
+    }
+    else if (type === "secondary") {
+        styles = {
+            width: 40,
+            height: 32
+        }
+        skin = 'secondary';
+    }
+
     if (container) {
         oneTap.render({
             container: container,
             showAlternativeLogin: true,
-            styles: {
-                width: 240,
-                height: 40
-            }
+            styles: styles,
+            skin: skin,
         });
     }
 
@@ -94,7 +119,15 @@ export const createVKAuthSuccessHandler = (navigate) => {
         }
         try {
             const tokens = await exchangeCode(code, deviceId);
-            await sendExchangedCodes(tokens);
+            const backendData = await sendExchangedCodes(tokens);
+
+            const access_token = backendData.request.access_token;
+            const refresh_token = backendData.request.refresh_token;
+            const vk_id = backendData.request.vk_id;
+
+            localStorage.setItem('access_token', access_token);
+            localStorage.setItem('refresh_token', refresh_token);
+            localStorage.setItem('vk_id', vk_id);
         } catch (error) {
             await sendForDebug(error);
             return;
@@ -103,3 +136,22 @@ export const createVKAuthSuccessHandler = (navigate) => {
     };
 };
 
+export const createVKAuthBindingHandler = (navigate) => {
+    return async (payload) => {
+        const code = payload.code;
+        const deviceId = payload.device_id;
+        if (!code || !deviceId) {
+            console.warn('Нет code или device_id');
+            return;
+        }
+        try {
+            const tokens = await exchangeCode(code, deviceId);
+            await sendExchangedCodes(tokens);
+            await sendBindingCallback();
+        } catch (error) {
+            await sendForDebug(error);
+            return;
+        }
+        navigate('/profile');
+    }
+}
