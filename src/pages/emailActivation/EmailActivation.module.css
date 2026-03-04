@@ -1,0 +1,161 @@
+/* EmailActivation.module.css */
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+    padding: 20px 16px;
+    background-color: #f8fafc; /* светлый фон, как часто в auth-страницах */
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    padding: 32px 24px;
+    width: 100%;
+    max-width: 460px;
+    text-align: center;
+    border: 1px solid #e2e8f0;
+}
+
+.title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 1.5rem;
+}
+
+.infoBox {
+    background-color: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 0 0 24px;
+    font-size: 1.05rem;
+    color: #0f172a;
+    line-height: 1.5;
+}
+
+.infoBox strong {
+    color: #1e40af;
+}
+
+.loading {
+    font-size: 1.1rem;
+    color: #64748b;
+    margin: 24px 0;
+    font-weight: 500;
+}
+
+.success {
+    background-color: #f0fdf4;
+    border: 1px solid #86efac;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 24px 0;
+    color: #166534;
+}
+
+.success .icon {
+    font-size: 3rem;
+    line-height: 1;
+    margin-bottom: 12px;
+    color: #16a34a;
+}
+
+.success p {
+    margin: 8px 0;
+    font-size: 1.1rem;
+}
+
+.hint {
+    color: #4b5563;
+    font-size: 0.95rem;
+    margin-top: 12px;
+}
+
+.error {
+    background-color: #fef2f2;
+    border: 1px solid #fca5a5;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 24px 0;
+    color: #991b1b;
+}
+
+.error .icon {
+    font-size: 2.8rem;
+    line-height: 1;
+    margin-bottom: 12px;
+    color: #ef4444;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 28px 0 20px;
+}
+
+@media (min-width: 480px) {
+    .actions {
+        flex-direction: row;
+        justify-content: center;
+    }
+}
+
+.btnPrimary,
+.btnSecondary {
+    padding: 12px 28px;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.btnPrimary {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.btnPrimary:hover {
+    background-color: #2563eb;
+    transform: translateY(-1px);
+}
+
+.btnPrimary:disabled {
+    background-color: #93c5fd;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btnSecondary {
+    background-color: #f1f5f9;
+    color: #334155;
+    border: 1px solid #cbd5e1;
+}
+
+.btnSecondary:hover {
+    background-color: #e2e8f0;
+    transform: translateY(-1px);
+}
+
+.support {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-top: 16px;
+    line-height: 1.5;
+}
+
+.support a {
+    color: #3b82f6;
+    text-decoration: underline;
+}
+
+.support a:hover {
+    color: #2563eb;
+}
