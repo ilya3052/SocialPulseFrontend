@@ -24,6 +24,8 @@ const RegistrationForm = () => {
             ? "Пароли не совпадают"
             : "";
 
+    const [usernameError, setUsernameError] = useState("");
+
     useEffect(() => {
         const cleanup = initializeTelegramWidget(createTGAuthHandler(navigate));
         return cleanup;
@@ -33,6 +35,10 @@ const RegistrationForm = () => {
         const cleanup = initializeVKID(createVKAuthSuccessHandler(navigate));
         return cleanup;
     }, [navigate]);
+
+    useEffect(() => {
+        setUsernameError("");
+    }, [formData.username]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -44,6 +50,7 @@ const RegistrationForm = () => {
 
     const sendRegistrationRequest = async (data) => {
         try {
+
             const response = await fetch(`${BASE_URL}/${API_VERSION}/accounts/register/`, {
                 method: "POST",
                 body: JSON.stringify(data),
@@ -58,7 +65,10 @@ const RegistrationForm = () => {
                 localStorage.setItem("refresh_token", result.tokens.refresh);
                 navigate("/profile");
             } else if (response.status === 400) {
-                const err = await response.text();
+                const err = await response.json();
+                if (err.username) {
+                    setUsernameError("Пользователь с таким именем уже существует");
+                }
                 await sendForDebug(err);
             } else {
                 alert("Ошибка сервера");
@@ -71,9 +81,9 @@ const RegistrationForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (passwordError) {
-            return;
-        }
+        if (passwordError) return;
+        if (usernameError) return;
+
         await sendRegistrationRequest(formData);
     };
 
@@ -92,8 +102,13 @@ const RegistrationForm = () => {
                         onChange={handleChange}
                         placeholder="Введите username"
                         required
-                        className={styles.formControl}
+                        className={`${styles.formControl} ${
+                            usernameError ? styles.inputError : ""
+                        }`}
                     />
+                    {usernameError && (
+                        <div className={styles.errorMessage}>{usernameError}</div>
+                    )}
                 </div>
 
                 <div className={styles.formGroup}>
