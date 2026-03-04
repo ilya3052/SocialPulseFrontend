@@ -1,3 +1,5 @@
+import {Navigate, useNavigate} from "react-router-dom";
+
 const sendForDebug = async (debug_message) => {
         await fetch('/api/v2/accounts/debug/', {
             method: 'POST',
@@ -123,4 +125,22 @@ const verifyAndRefreshToken = async () => {
     }
 };
 
-export { sendForDebug, BASE_URL, API_VERSION, verifyAndRefreshToken };
+const logout = async (navigate) => {
+    const res = await fetch(`${BASE_URL}/${API_VERSION}/accounts/token/blacklist/`, {
+        method: "POST" ,
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ refresh: localStorage.getItem("refresh_token") }),
+    });
+    if (res.ok) {
+        localStorage.clear();
+    }
+    else if (res.status === 400) {
+        const err = await res.text();
+        await sendForDebug(err);
+    }
+    navigate('/login');
+}
+
+export { sendForDebug, BASE_URL, API_VERSION, verifyAndRefreshToken, logout };
