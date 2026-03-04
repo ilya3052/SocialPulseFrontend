@@ -66,7 +66,7 @@ const LoginForm = () => {
     }
 
     useEffect(() => {
-        const cleanup = initializeVKID(createVKAuthSuccessHandler(navigate));
+        const cleanup = initializeVKID(createVKAuthSuccessHandler(navigate), 'primary');
         return cleanup;
     }, [navigate]);
 
