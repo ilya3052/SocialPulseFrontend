@@ -1,19 +1,38 @@
 import styles from './profile.module.css';
 import {useEffect, useState} from "react";
-import {API_VERSION, BASE_URL} from "../../utils/utils.js";
+import {API_VERSION, BASE_URL, logout, sendForDebug, verifyAndRefreshToken} from "../../utils/utils.js";
+import {Navigate, useNavigate} from "react-router-dom";
+import {createVKAuthBindingHandler, createVKAuthSuccessHandler, initializeVKID} from "../../utils/OneTapVKAuth.jsx";
 
 
 
 const PersonalTab = () => {
 
-    const [personalData, setPersonalData] = useState({
-        first_name: "Иван",
-        last_name: "Иванов",
-        username: "иван",
-        email: "mail@mail.ru",
-    });
+    const INITIAL_PASSWORD_FORM_STATE = {
+        old_password: "",
+        new_password: "",
+        confirm_password: "",
+    };
 
-    // Копия данных для редактирования (чтобы можно было отменить изменения)
+    const INITIAL_PERSONAL_FORM_STATE = {
+        first_name: "",
+        last_name: "",
+        username: "",
+        email: "",
+        tg_id: "",
+        tg_link: "",
+        vk_id: "",
+        vk_link: ""
+    }
+
+    const SERVICE_DATA = {
+        is_email_confirmed: false,
+    }
+
+    const [hasPassword, setHasPassword] = useState(false);
+
+    const [personalData, setPersonalData] = useState(INITIAL_PERSONAL_FORM_STATE);
+
     const [editData, setEditData] = useState(personalData);
 
     // Режим редактирования
@@ -24,6 +43,76 @@ const PersonalTab = () => {
         setEditData(personalData);
     }, [personalData]);
 
+    const [passwordData, setPasswordData] = useState(INITIAL_PASSWORD_FORM_STATE);
+    const [newPasswordError, setNewPasswordError] = useState(false);     // для отображения ошибок
+    const [newPasswordErrorData, setNewPasswordErrorData] = useState([])
+
+    const [isPasswordLoading, setIsPasswordLoading] = useState(false);
+
+    const [isEmailConfirmed, setIsEmailConfirmed] = useState(false);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const cleanup = initializeVKID(createVKAuthBindingHandler(navigate), 'secondary');
+        return cleanup;
+    }, [navigate]);
+
+    const getUserData = async (token) => {
+        const response = await fetch(`${BASE_URL}/${API_VERSION}/accounts/users/me/`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
+        return response;
+    }
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            let token = localStorage.getItem("access_token");
+            if (!token) {
+                if (!(await verifyAndRefreshToken())) {
+                    navigate("/login");
+                    return;
+                }
+                return;
+            }
+
+            try {
+                const response = await getUserData(token);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setPersonalData(data.data);
+                    setIsEmailConfirmed(data.data.is_email_confirmed)
+
+                    setHasPassword(data.has_password);
+                }
+                else if (response.status === 400) {
+                    alert(await response.text());
+                }
+                else if (response.status === 401) {
+                    if (!(await verifyAndRefreshToken())) {
+                        navigate("/login");
+                        return;
+                    }
+                    token = localStorage.getItem("access_token");
+                    const retryRes = await getUserData(token);
+                    setPersonalData(await retryRes.json());
+                } else {
+                    console.warn("Не удалось загрузить профиль", response.status);
+                    // можно показать уведомление, но не обязательно ломать регистрацию
+                }
+            } catch (err) {
+                console.error("Ошибка при загрузке пользовательских данных:", err);
+            }
+        };
+
+        fetchUserData();
+    }, [navigate]);
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setEditData((prev) => ({
@@ -32,30 +121,71 @@ const PersonalTab = () => {
         }));
     };
 
+    const handlePasswordChangeInput = (e) => {
+        const { name, value } = e.target;
+        setPasswordData((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+        setNewPasswordErrorData([]); // сбрасываем ошибку при вводе
+    };
+
+    const sendEditedData = async (type) => {
+        let url;
+        let dataToEdit;
+        switch (type) {
+            case "personal":
+                url = `${BASE_URL}/${API_VERSION}/accounts/users/me/`;
+                dataToEdit = editData;
+                break;
+            case "change-password":
+                url = `${BASE_URL}/${API_VERSION}/accounts/users/change-password/`;
+                dataToEdit = passwordData;
+                break;
+            case "set-password":
+                url = `${BASE_URL}/${API_VERSION}/accounts/users/set-password/`;
+                dataToEdit = passwordData;
+                break;
+
+        }
+        const response = await fetch(url, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem('access_token')}`,
+            },
+            body: JSON.stringify(dataToEdit),
+        });
+        return response;
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Здесь будет запрос на сервер
         try {
-            const res = await fetch(`${BASE_URL}/${API_VERSION}/accounts/users/me/`, {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem('access_token')}`,
-                },
-                body: JSON.stringify(editData),
-            });
-
-            if (res.status === 200) {
-                setPersonalData(editData);
-                setIsEditing(false);
+            const res = await sendEditedData("personal");
+            switch (res.status) {
+                case 200:
+                    setPersonalData(editData);
+                    setIsEditing(false);
+                    break;
+                case 400:
+                    alert((await res.text()));
+                    break;
+                case 401:
+                    if (!(await verifyAndRefreshToken())) {
+                        await logout(navigate);
+                        return;
+                    }
+                    const retryRes = await sendEditedData("personal");
+                    if (retryRes.status === 200) {
+                        setPersonalData(editData);
+                        setIsEditing(false);
+                    } else {
+                        throw new Error(`Ошибка после обновления токена: ${retryRes.status}`);
+                    }
+                    break;
             }
-            else if (res.status === 401) {
-                
-            }
-
-            // Успешно → обновляем отображаемые данные
-
         } catch (err) {
             console.error("Ошибка сохранения:", err);
             alert("Не удалось сохранить изменения");
@@ -63,10 +193,98 @@ const PersonalTab = () => {
         }
     };
 
+    const handlePasswordError = async (errors) => {
+        if ("non_field_errors" in errors) {
+            setNewPasswordError(true);
+            setNewPasswordErrorData(errors.non_field_errors);
+        }
+        else if ("wrong_old_password" in errors) {
+            setNewPasswordError(true);
+            setNewPasswordErrorData(errors.wrong_old_password);
+        }
+        else if ("confirm_password" in errors) {
+            setNewPasswordError(true);
+            setNewPasswordErrorData(errors.confirm_password);
+        }
+        else if ("new_password" in errors) {
+            setNewPasswordError(true);
+            setNewPasswordErrorData(errors.new_password);
+        }
+
+    }
+
+    const handlePasswordSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const res = await sendEditedData(hasPassword ? "change-password" : "set-password");
+            switch (res.status) {
+                case 200:
+                    setPasswordData(INITIAL_PASSWORD_FORM_STATE);
+                    const tokens = (await res.json()).data
+                    localStorage.setItem("access_token", tokens.access);
+                    localStorage.setItem("refresh_token", tokens.refresh);
+                    setHasPassword(true);
+                    navigate(0);
+                    break;
+                case 400:
+                    await handlePasswordError(await res.json());
+                    break;
+            }
+        }
+        catch (err) {
+            console.error(err);
+        }
+    }
+
     const handleCancel = () => {
         setEditData(personalData); // откатываем изменения
         setIsEditing(false);
     };
+
+    const handleTGBind = async () => {
+        try {
+            const access_token = localStorage.getItem("access_token");
+            const refresh_token = localStorage.getItem("refresh_token");
+            const response = await fetch(`${BASE_URL}/${API_VERSION}/accounts/tg/token/short/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${access_token}`,
+                },
+                body: JSON.stringify({
+                    "access_token": access_token,
+                    "refresh_token": refresh_token,
+                })
+            });
+            if (response.status === 201) {
+                const short_token = (await response.json()).short_token;
+                localStorage.setItem("short_tg_token", short_token);
+                window.open(`https://t.me/socialpulsesandboxbot?start=${short_token}`, "_blank");
+            }
+            else if (response.status === 400) {
+                const err = await response.text();
+                alert(err);
+                await sendForDebug(err);
+            }
+        }
+        catch (err) {
+            console.error(err);
+            await sendForDebug(err);
+        }
+    }
+
+    const confirmEmail = async () => {
+        try {
+            localStorage.setItem("pending-email", personalData.email);
+            const res = await fetch(`${BASE_URL}/${API_VERSION}/accounts/email/send/`, {
+                method: "GET",
+                headers: {'Authorization': `Bearer ${localStorage.getItem("access_token")}`,}
+            })
+        }
+        catch (err) {
+
+        }
+    }
 
     return (
         <div className={styles.tabContent}>
@@ -161,39 +379,92 @@ const PersonalTab = () => {
                         ) : (
                             <span className={styles.viewValue}>{personalData.email || "—"}</span>
                         )}
+                        {personalData.email && !isEmailConfirmed && (
+                            <button onClick={confirmEmail} className={styles.confirmEmail} type="button">
+                                Подтвердить почту
+                            </button>
+                        )}
                     </div>
                 </form>
 
                 <div className={styles.platformStatus}>
                     <div>
                         <strong>TG:</strong>
-                        <span>Иван Иванов (@ivan_tg)</span>
-                        <button className={styles.unlinkBtn}>Отвязать</button>
+                        <span>{personalData.tg_link || "Не привязано"}</span>
+                        <button onClick={handleTGBind} className={styles.linkPlatform}>Привязать</button>
                     </div>
                     <div>
                         <strong>VK:</strong>
-                        <span>Не привязано</span>
-                        <a href="#" className={styles.linkPlatform}>Привязать</a>
+                        <span>{personalData.vk_link || "Не привязано"}</span>
+                        <div id="vkAuth"></div>
+                        {/*<button className={styles.linkPlatform}>Привязать</button>*/}
                     </div>
                 </div>
             </div>
 
             {/* Блок смены пароля остаётся без изменений */}
             <div className={styles.profileBlock}>
-                <h3>Смена пароля</h3>
-                <div className={styles.formRow}>
-                    <label>Старый пароль</label>
-                    <input type="password" />
-                </div>
-                <div className={styles.formRow}>
-                    <label>Новый пароль</label>
-                    <input type="password" />
-                </div>
-                <div className={styles.formRow}>
-                    <label>Подтверждение нового пароля</label>
-                    <input type="password" />
-                </div>
-                <button className={styles.passwordSaveBtn}>Сменить пароль</button>
+                <h3>{hasPassword ? 'Смена' : 'Установка'} пароля</h3>
+
+                <form onSubmit={handlePasswordSubmit} className={styles.passwordForm}>
+                    {hasPassword && (
+                        <div className={styles.formRow}>
+                            <label>Старый пароль</label>
+                            <input
+                                type="password"
+                                name="old_password"
+                                value={passwordData.old_password}
+                                onChange={handlePasswordChangeInput}
+                                autoComplete="current-password"
+                                required={hasPassword} // Делаем поле обязательным только когда оно есть
+                            />
+                        </div>
+                    )}
+
+                    <div className={styles.formRow}>
+                        <label>Новый пароль</label>
+                        <input
+                            type="password"
+                            name="new_password"
+                            value={passwordData.new_password}
+                            onChange={handlePasswordChangeInput}
+                            autoComplete="new-password"
+                            required
+                        />
+                    </div>
+
+                    <div className={styles.formRow}>
+                        <label>Подтверждение нового пароля</label>
+                        <input
+                            type="password"
+                            name="confirm_password"
+                            value={passwordData.confirm_password}
+                            onChange={handlePasswordChangeInput}
+                            autoComplete="new-password"
+                            required
+                        />
+                    </div>
+
+                    {newPasswordError && (
+                        <p className={styles.passwordErrors}>{newPasswordErrorData.map((elem) => (
+                            <span>{elem}</span>
+                        ))}</p>
+                    )}
+
+                    <button
+                        type="submit"
+                        className={styles.passwordSaveBtn}
+                        disabled={isPasswordLoading}
+                    >
+                        {!hasPassword ? "Установить пароль" : "Сменить пароль"}
+                    </button>
+                </form>
+                {!hasPassword && (
+                    <p className={styles.passwordInfo}>
+                        У вас ещё нет пароля, так как вы вошли через социальную сеть.
+                        Установите пароль, чтобы входить по username и паролю.
+                    </p>
+                )}
             </div>
         </div>
     );
