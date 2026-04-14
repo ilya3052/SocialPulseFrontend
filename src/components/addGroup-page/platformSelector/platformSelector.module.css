@@ -1,0 +1,53 @@
+.platformsContainer {
+    display: flex;
+    gap: 1rem;
+}
+
+.platformBtn {
+    flex: 1;
+    padding: 1.5rem;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.platformBtn:hover {
+    border-color: #2c5aa0;
+}
+
+.platformBtn.active {
+    border-color: #2c5aa0;
+    background: #f8faff;
+}
+
+.platformIcon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    font-size: 1.2rem;
+}
+
+.platformBtnTG .platformIcon {
+    background: #2c5aa0;
+}
+
+.platformBtnVK .platformIcon {
+    background: #4c75a3;
+}
+
+.platformName {
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #333;
+}

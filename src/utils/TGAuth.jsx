@@ -18,11 +18,9 @@ export const handleTelegramAuth = async (user, navigate) => {
     });
     if (res.ok) {
         const data = await res.json();
+        console.log(data);
         localStorage.setItem('access_token', data.access);
         localStorage.setItem('refresh_token', data.refresh);
-        const userData = data.user;
-        localStorage.setItem('user_id', userData.id);
-        localStorage.setItem('username', userData.username);
         navigate('/profile');
     }
     else {

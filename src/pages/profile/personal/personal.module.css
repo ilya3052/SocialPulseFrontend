@@ -1,0 +1,226 @@
+/* Основной контент таба */
+.tabContent {
+    padding: 2rem;
+}
+
+/* Блоки профиля */
+.profileBlock {
+    margin-bottom: 2rem;
+}
+
+.profileBlock h3 {
+    margin-bottom: 1.5rem;
+    color: #333;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #f8f9fa;
+}
+
+/* Заголовок блока с кнопками */
+.blockHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.2rem;
+}
+
+.editBtn {
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.editBtn:hover {
+    background: #e0e0e0;
+}
+
+.editActions {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.cancelBtn {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    padding: 0.4rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.cancelBtn:hover {
+    background: #f5c6cb;
+}
+
+.saveBtn {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.saveBtn:hover {
+    background: #218838;
+}
+
+/* Формы */
+.formRow {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    gap: 1rem;
+}
+
+.formRow label {
+    width: 250px;
+    font-weight: 500;
+    color: #555;
+}
+
+.formRow input {
+    flex: 1;
+    padding: 0.7rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    max-width: 400px;
+}
+
+.formRow input:focus {
+    outline: none;
+    border-color: #2c5aa0;
+    box-shadow: 0 0 0 2px rgba(44, 90, 160, 0.1);
+}
+
+.viewValue {
+    font-weight: 500;
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+    padding: 0 0.5rem;
+    color: #333;
+}
+
+/* Дополнительный класс для формы личных данных */
+.personalInfo {
+    /* Можно добавить специфические стили при необходимости */
+}
+
+/* Статусы платформ */
+.platformStatus {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-top: 1.5rem;
+}
+
+.platformStatus div {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.platformStatus div:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.platformStatus strong {
+    width: 60px;
+    color: #333;
+}
+
+.linkPlatform {
+    color: #2c5aa0;
+    margin-left: 12px;
+    padding: 0.45rem 1rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.linkPlatform:hover {
+    text-decoration: underline;
+    background: #f8f9fa;
+}
+
+/* Кнопка подтверждения email */
+.confirmEmail {
+    margin-left: 12px;
+    padding: 0.45rem 1rem;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.confirmEmail:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+.confirmEmail:active {
+    transform: translateY(0);
+}
+
+/* Форма смены пароля */
+.passwordForm {
+    /* Можно добавить специфические стили при необходимости */
+}
+
+.passwordSaveBtn {
+    padding: 1rem 2rem;
+    background: #2c5aa0;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+    display: block;
+    margin: 2rem auto 0;
+}
+
+.passwordSaveBtn:hover {
+    background: #1e3d6f;
+}
+
+.passwordSaveBtn:disabled {
+    background: #a0a0a0;
+    cursor: not-allowed;
+}
+
+/* Ошибки пароля */
+.passwordErrors {
+    display: flex;
+    flex-direction: column;
+    color: #a94442;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Информационное сообщение */
+.passwordInfo {
+    color: #666;
+    font-size: 0.95rem;
+    margin-top: 1rem;
+    line-height: 1.5;
+}

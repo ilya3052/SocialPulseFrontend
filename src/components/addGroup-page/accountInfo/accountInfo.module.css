@@ -1,0 +1,84 @@
+.accountInfo {
+    display: none;
+}
+
+.accountInfo.active {
+    display: block;
+}
+
+.accountRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.accountType h3,
+.serviceAccount h3 {
+    color: #555;
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+}
+
+.accountDetails {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.accountName {
+    font-weight: 500;
+    color: #333;
+}
+
+.accountStatus {
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.accountStatus.connected {
+    background: #d4edda;
+    color: #155724;
+}
+
+.accountStatus.notConnected {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* Поле ввода ссылки */
+.groupLinkInput {
+    display: flex;
+    gap: 1rem;
+}
+
+.linkInput {
+    flex: 1;
+    padding: 0.8rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.linkInput:focus {
+    outline: none;
+    border-color: #2c5aa0;
+}
+
+.requestDataBtn {
+    padding: 0 1.5rem;
+    background: #2c5aa0;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.3s;
+}
+
+.requestDataBtn:hover {
+    background: #1e3d6f;
+}

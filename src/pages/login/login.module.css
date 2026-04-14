@@ -101,6 +101,7 @@
 }
 
 .authContainer {
+    flex: 1;
     height: 40px;
     border-radius: 6px;
     display: flex;

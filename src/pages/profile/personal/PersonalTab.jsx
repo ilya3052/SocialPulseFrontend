@@ -1,8 +1,8 @@
-import styles from './profile.module.css';
+import styles from './personal.module.css';
 import {useEffect, useState} from "react";
-import {API_VERSION, BASE_URL, logout, sendForDebug, verifyAndRefreshToken} from "../../utils/utils.js";
+import {API_VERSION, BASE_URL, logout, sendForDebug, verifyAndRefreshToken} from "../../../utils/utils.js";
 import {Navigate, useNavigate} from "react-router-dom";
-import {createVKAuthBindingHandler, createVKAuthSuccessHandler, initializeVKID} from "../../utils/OneTapVKAuth.jsx";
+import {createVKAuthBindingHandler, initializeVKID} from "../../../utils/OneTapVKAuth.jsx";
 
 
 
@@ -85,6 +85,7 @@ const PersonalTab = () => {
 
                 if (response.ok) {
                     const data = await response.json();
+                    console.log(data);
                     setPersonalData(data.data);
                     setIsEmailConfirmed(data.data.is_email_confirmed)
 
@@ -173,7 +174,7 @@ const PersonalTab = () => {
                     alert((await res.text()));
                     break;
                 case 401:
-                    if (!(await verifyAndRefreshToken())) {
+                    { if (!(await verifyAndRefreshToken())) {
                         await logout(navigate);
                         return;
                     }
@@ -184,7 +185,7 @@ const PersonalTab = () => {
                     } else {
                         throw new Error(`Ошибка после обновления токена: ${retryRes.status}`);
                     }
-                    break;
+                    break; }
             }
         } catch (err) {
             console.error("Ошибка сохранения:", err);
@@ -219,13 +220,13 @@ const PersonalTab = () => {
             const res = await sendEditedData(hasPassword ? "change-password" : "set-password");
             switch (res.status) {
                 case 200:
-                    setPasswordData(INITIAL_PASSWORD_FORM_STATE);
+                    { setPasswordData(INITIAL_PASSWORD_FORM_STATE);
                     const tokens = (await res.json()).data
                     localStorage.setItem("access_token", tokens.access);
                     localStorage.setItem("refresh_token", tokens.refresh);
                     setHasPassword(true);
                     navigate(0);
-                    break;
+                    break; }
                 case 400:
                     await handlePasswordError(await res.json());
                     break;
@@ -282,7 +283,7 @@ const PersonalTab = () => {
             })
         }
         catch (err) {
-
+            console.log(err);
         }
     }
 
@@ -379,8 +380,12 @@ const PersonalTab = () => {
                         ) : (
                             <span className={styles.viewValue}>{personalData.email || "—"}</span>
                         )}
-                        {personalData.email && !isEmailConfirmed && (
-                            <button onClick={confirmEmail} className={styles.confirmEmail} type="button">
+                        {!isEditing && personalData.email && !isEmailConfirmed && (
+                            <button
+                                onClick={confirmEmail}
+                                className={styles.confirmEmail}
+                                type="button"
+                            >
                                 Подтвердить почту
                             </button>
                         )}

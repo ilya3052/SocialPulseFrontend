@@ -1,0 +1,118 @@
+import styles from './groups.module.css';
+import {API_VERSION, BASE_URL, verifyAndRefreshToken} from "../../../utils/utils.js";
+import {useEffect, useState} from "react";
+import {Link, useNavigate} from "react-router-dom";
+import GroupCard from "../../../components/profile-groups-page/groupCard/groupCard.jsx";
+
+
+const GroupsTab = () => {
+
+    const navigate = useNavigate();
+
+    const [groups, setGroups] = useState([]);
+
+    const getGroups = async () => {
+        let token = localStorage.getItem("access_token");
+        if (!token) {
+            if (!(await verifyAndRefreshToken())) {
+                navigate("/login");
+                return;
+            }
+            return;
+        }
+        try {
+            return await fetch(`${BASE_URL}/${API_VERSION}/accounts/groups/`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                },
+            });
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
+    const handleAddGroup = async () => {
+
+    }
+
+    const handleDelete = async () => {
+
+    }
+
+    useEffect(() => {
+        const fetchGroupData = async () => {
+            let token = localStorage.getItem("access_token");
+            if (!token) {
+                if (!(await verifyAndRefreshToken())) {
+                    navigate("/login");
+                    return;
+                }
+                return;
+            }
+
+            try {
+                const response = await getGroups(token);
+
+                if (response.ok) {
+                    const data = await response.json();
+
+                    setGroups(data);
+
+                }
+                // else if (response.status === 400) {
+                //     alert(await response.text());
+                // }
+                // else if (response.status === 401) {
+                //     if (!(await verifyAndRefreshToken())) {
+                //         navigate("/login");
+                //         return;
+                //     }
+                //     token = localStorage.getItem("access_token");
+                //     const retryRes = await getUserData(token);
+                //     setPersonalData(await retryRes.json());
+                // } else {
+                //     console.warn("Не удалось загрузить профиль", response.status);
+                //     // можно показать уведомление, но не обязательно ломать регистрацию
+                // }
+            } catch (err) {
+                console.error("Ошибка при загрузке пользовательских данных:", err);
+            }
+        };
+
+        fetchGroupData();
+    }, [navigate]);
+
+    return (
+        <div className={styles.tabContent}>
+            <div className={styles.groupsHeader}>
+                <h3>Мои группы</h3>
+                <Link to="/profile/groups/add" className={styles.addGroup}>
+                    Добавить группу
+                </Link>
+            </div>
+
+            {/* Сетка с карточками групп */}
+            <div className={styles.groupsGrid}>
+                {groups.length > 0 ? (
+                    groups.map(group => (
+                        <GroupCard
+                            key={group.external_id}
+                            group={group}
+                            onDelete={handleDelete}
+                        />
+                    ))
+                ) : (
+                    <p className={styles.noGroups}>
+                        У вас пока нет подключённых групп.<br />
+                        Нажмите «Добавить группу», чтобы начать.
+                    </p>
+                )}
+            </div>
+        </div>
+    );
+};
+
+export default GroupsTab;

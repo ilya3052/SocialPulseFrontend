@@ -1,0 +1,97 @@
+/* AddGroup.module.css */
+
+.addGroupContainer {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+    flex: 1;
+}
+
+.pageTitle {
+    color: #333;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+/* Секции */
+.section {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+}
+
+.section h2 {
+    color: #333;
+    margin-bottom: 1.5rem;
+    font-size: 1.3rem;
+}
+
+/* Выбор платформы */
+
+/* Информация об аккаунтах */
+
+
+
+
+/* Данные о группе */
+.groupData {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.dataRow {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.dataRow:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.dataLabel {
+    width: 150px;
+    font-weight: 500;
+    color: #666;
+}
+
+.dataValue {
+    flex: 1;
+    font-weight: 500;
+    color: #333;
+}
+
+.statusSuccess {
+    color: #28a745;
+    font-weight: 600;
+}
+
+/* Кнопка добавления */
+.addBtnContainer {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.addBtn {
+    padding: 1rem 3rem;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.addBtn:hover {
+    background: #218838;
+}

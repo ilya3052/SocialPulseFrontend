@@ -1,4 +1,4 @@
-import {Routes, Route, useLocation} from 'react-router-dom';
+import {Routes, Route, useLocation, Navigate} from 'react-router-dom';
 import LoginForm from './pages/login/Login.jsx';
 import ProfileSection from './pages/profile/ProfileSection.jsx';
 
@@ -7,6 +7,7 @@ import ProtectedLayout from "./components/protectedLayout/protectedLayout.jsx";
 import Header from "./components/header/Header.jsx";
 import Footer from "./components/footer/Footer.jsx";
 import EmailActivation from "./pages/emailActivation/EmailActivation.jsx";
+import AddGroup from "./pages/addGroup/addGroup.jsx";
 
 const App = () => {
     const location = useLocation();
@@ -26,10 +27,10 @@ const App = () => {
 
                     {/* Protected */}
                     <Route element={<ProtectedLayout />}>
-                        <Route path="/" element={<ProfileSection />} />
+                        <Route path="/" element={<Navigate to="/profile" replace />} />
                         <Route path="/profile" element={<ProfileSection />} />
                         <Route path="/email/activate" element={<EmailActivation />} />
-
+                        <Route path="/profile/groups/add" element={<AddGroup />}/>
                     </Route>
                 </Routes>
             </main>

@@ -59,8 +59,6 @@ const RegistrationForm = () => {
 
             if (response.status === 201) {
                 const result = await response.json();
-                localStorage.setItem("user_id", result.user.id);
-                localStorage.setItem("username", result.user.username);
                 localStorage.setItem("access_token", result.tokens.access);
                 localStorage.setItem("refresh_token", result.tokens.refresh);
                 navigate("/profile");
