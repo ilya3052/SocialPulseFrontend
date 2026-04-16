@@ -1,5 +1,5 @@
 import styles from './groups.module.css';
-import {API_VERSION, BASE_URL, verifyAndRefreshToken} from "../../../utils/utils.js";
+import {API_VERSION, BASE_URL, sendForDebug, verifyAndRefreshToken} from "../../../utils/utils.js";
 import {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import GroupCard from "../../../components/profile-groups-page/groupCard/groupCard.jsx";
@@ -11,38 +11,57 @@ const GroupsTab = () => {
 
     const [groups, setGroups] = useState([]);
 
-    const getGroups = async () => {
-        let token = localStorage.getItem("access_token");
-        if (!token) {
-            if (!(await verifyAndRefreshToken())) {
-                navigate("/login");
+    const handleDelete = async (groupID) => {
+        try {
+            let token = localStorage.getItem("access_token");
+            if (!token) {
+                if (!(await verifyAndRefreshToken())) {
+                    navigate("/login");
+                    return;
+                }
                 return;
             }
-            return;
-        }
-        try {
-            return await fetch(`${BASE_URL}/${API_VERSION}/accounts/groups/`, {
-                method: "GET",
+            const res = await fetch(`${BASE_URL}/${API_VERSION}/accounts/groups/${groupID}`, {
+                method: "DELETE",
                 headers: {
-                    "Authorization": `Bearer ${token}`,
                     "Content-Type": "application/json",
-                },
+                    "Authorization": `Bearer ${token}`,
+                }
             });
+            if (res.status === 204) {
+                window.location.reload();
+            }
         }
+
         catch (err) {
             console.log(err);
         }
     }
 
-    const handleAddGroup = async () => {
-
-    }
-
-    const handleDelete = async () => {
-
-    }
-
     useEffect(() => {
+        const getGroups = async () => {
+            let token = localStorage.getItem("access_token");
+            if (!token) {
+                if (!(await verifyAndRefreshToken())) {
+                    navigate("/login");
+                    return;
+                }
+                return;
+            }
+            try {
+                return await fetch(`${BASE_URL}/${API_VERSION}/accounts/groups/`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                });
+            }
+            catch (err) {
+                console.log(err);
+            }
+        };
+
         const fetchGroupData = async () => {
             let token = localStorage.getItem("access_token");
             if (!token) {
@@ -58,7 +77,7 @@ const GroupsTab = () => {
 
                 if (response.ok) {
                     const data = await response.json();
-
+                    await sendForDebug(data)
                     setGroups(data);
 
                 }
@@ -99,7 +118,7 @@ const GroupsTab = () => {
                 {groups.length > 0 ? (
                     groups.map(group => (
                         <GroupCard
-                            key={group.external_id}
+                            key={group.id}
                             group={group}
                             onDelete={handleDelete}
                         />

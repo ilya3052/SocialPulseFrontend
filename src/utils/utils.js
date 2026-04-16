@@ -1,5 +1,3 @@
-import {Navigate, useNavigate} from "react-router-dom";
-
 const sendForDebug = async (debug_message) => {
         await fetch('/api/v2/accounts/debug/', {
             method: 'POST',
@@ -143,4 +141,4 @@ const logout = async (navigate) => {
     navigate('/login');
 }
 
-export { sendForDebug, BASE_URL, API_VERSION, verifyAndRefreshToken, logout };
+export { sendForDebug, BASE_URL, API_VERSION, verifyAndRefreshToken, logout};

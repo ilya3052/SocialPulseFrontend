@@ -46,7 +46,7 @@ const GroupCard = ({ group, onDelete }) => {
 
             <button
                 className={styles.deleteGroupBtn}
-                onClick={() => onDelete(group.external_id)}
+                onClick={() => onDelete(group.id)}
                 title="Удалить группу"
             >
                 🗑

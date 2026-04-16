@@ -74,6 +74,16 @@
     font-weight: 600;
 }
 
+.statusPartialAccess {
+    color: #a79228;
+    font-weight: 600;
+}
+
+.statusError {
+    color: #a94442;
+    font-weight: 600;
+}
+
 /* Кнопка добавления */
 .addBtnContainer {
     text-align: center;

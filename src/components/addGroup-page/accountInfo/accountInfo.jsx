@@ -1,5 +1,10 @@
 import React, {useState} from 'react';
 import styles from './accountInfo.module.css';
+import {sendForDebug, verifyAndRefreshToken} from "../../../utils/utils.js";
+import {useNavigate} from "react-router-dom";
+
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_VERSION = import.meta.env.VITE_API_VERSION;
 
 const AccountInfo = ({
                          platform,           // объект платформы { id, name, alias }
@@ -11,6 +16,8 @@ const AccountInfo = ({
                      }) => {
 
     const [groupLink, setGroupLink] = useState('');
+
+    const navigate = useNavigate();
 
     if (loading) {
         return <div className={styles.loading}>Загрузка платформ...</div>;
@@ -38,6 +45,45 @@ const AccountInfo = ({
             : 'Введите ссылку...';
 
     const fetchGroupData = async () => {
+        try {
+            let token = localStorage.getItem("access_token");
+            if (!token) {
+                if (!(await verifyAndRefreshToken())) {
+                    navigate("/login");
+                    return;
+                }
+                return;
+            }
+
+            const vk_id = localStorage.getItem("vk_id");
+            const res = await fetch(`${BASE_URL}/${API_VERSION}/accounts/group/check-access/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({groupLink: groupLink, vk_id: vk_id, serviceAccount: serviceAccount.id})
+            });
+            if (res.ok) {
+                const data = await res.json();
+                setGroupData({id: data['group_id'], name: data['group_name'], groupLink: groupLink, access: data['status']});
+            }
+            else if (res.status === 400) {
+                const data = await res.json();
+                setGroupData({msg: data['msg'], access: data['status']})
+            }
+            else if (res.status === 406 || res.status === 404) {
+                const data = await res.json();
+                setGroupData({id: data['group_id'], name: data['group_name'], groupLink: groupLink, access: data['status']});
+            }
+            else {
+                const err = await res.text();
+                await sendForDebug(err);
+            }
+        }
+        catch (error) {
+            console.error(error);
+        }
         console.log(groupLink);
     }
 
