@@ -396,12 +396,12 @@ const PersonalTab = () => {
                     <div>
                         <strong>TG:</strong>
                         <span>{personalData.tg_link || "Не привязано"}</span>
-                        <button onClick={handleTGBind} className={styles.linkPlatform}>Привязать</button>
+                        {!personalData.tg_link && <button onClick={handleTGBind} className={styles.linkPlatform}>Привязать</button>}
                     </div>
                     <div>
                         <strong>VK:</strong>
                         <span>{personalData.vk_link || "Не привязано"}</span>
-                        <div id="vkAuth"></div>
+                        {!personalData.vk_link && <div id="vkAuth"></div>}
                         {/*<button className={styles.linkPlatform}>Привязать</button>*/}
                     </div>
                 </div>

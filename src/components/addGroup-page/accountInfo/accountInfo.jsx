@@ -54,15 +54,25 @@ const AccountInfo = ({
                 }
                 return;
             }
-
-            const vk_id = localStorage.getItem("vk_id");
+            let user_id;
+            if (platform.alias === 'tg') {
+                user_id = localStorage.getItem("tg_id");
+            }
+            else if (platform.alias === 'vk') {
+                user_id = localStorage.getItem("vk_id");
+            }
             const res = await fetch(`${BASE_URL}/${API_VERSION}/accounts/group/check-access/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({groupLink: groupLink, vk_id: vk_id, serviceAccount: serviceAccount.id})
+                body: JSON.stringify({
+                    groupLink: groupLink,
+                    id: user_id,
+                    serviceAccount: serviceAccount.id,
+                    platform: platform.alias
+                })
             });
             if (res.ok) {
                 const data = await res.json();

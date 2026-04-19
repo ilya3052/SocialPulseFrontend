@@ -128,19 +128,7 @@ const AddGroup = () => {
     }
 
     const sendGroupData = async () => {
-        // "debug_message": {
-        //     "id": 193824248,
-        //         "name": "Бан",
-        //         "groupLink": "https://vk.com/club193824248",
-        //         "access": 0
-        // }
-        // name = models.CharField(max_length=128)
-        // link = models.CharField(max_length=256)
-        // external_id = models.BigIntegerField(db_index=True)
-        // added_at = models.DateTimeField(default=default_expires_at)
-        // platform = models.ForeignKey('Platform', on_delete=models.CASCADE)
-        // user = models.ManyToManyField('CustomUser')
-        // service_account = models.ForeignKey('ServiceAccount', on_delete=models.SET_NULL, null=True, related_name='groups')
+
         const platform = platforms.find(p => p.alias === activePlatform);
 
         try {
@@ -158,6 +146,7 @@ const AddGroup = () => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
+
                 body: JSON.stringify({
                     name: groupData.name,
                     link: groupData.groupLink,
@@ -178,7 +167,6 @@ const AddGroup = () => {
             console.log(err);
         }
 
-        await sendForDebug({groupData, serviceAccount, platform});
     }
 
     return (
@@ -208,7 +196,6 @@ const AddGroup = () => {
                 />
             </section>
             }
-            {/* Блок 3: Данные о группе */}
             {groupData && <section className={styles.section}>
                 <h2>Данные о группе</h2>
                 <div className={styles.groupData}>
@@ -229,7 +216,6 @@ const AddGroup = () => {
                 </div>
             </section>
             }
-            {/* Кнопка добавления */}
             {groupData && 'access' in groupData && groupData.access === 0 && <div className={styles.addBtnContainer}>
                 <button className={styles.addBtn} onClick={sendGroupData}>Добавить группу</button>
             </div>}
