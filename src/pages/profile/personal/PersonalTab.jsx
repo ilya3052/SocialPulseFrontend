@@ -276,11 +276,23 @@ const PersonalTab = () => {
 
     const confirmEmail = async () => {
         try {
+            let token = localStorage.getItem("access_token");
+            if (!token) {
+                if (!(await verifyAndRefreshToken())) {
+                    navigate("/login");
+                    return;
+                }
+                return;
+            }
             localStorage.setItem("pending-email", personalData.email);
+
             const res = await fetch(`${BASE_URL}/${API_VERSION}/accounts/email/send/`, {
                 method: "GET",
                 headers: {'Authorization': `Bearer ${localStorage.getItem("access_token")}`,}
-            })
+            });
+            if (res.ok) {
+                console.log(res.json())
+            }
         }
         catch (err) {
             console.log(err);
