@@ -1,9 +1,8 @@
 import styles from './personal.module.css';
 import {useEffect, useState} from "react";
 import {API_VERSION, BASE_URL, logout, sendForDebug, verifyAndRefreshToken} from "../../../utils/utils.js";
-import {Navigate, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {createVKAuthBindingHandler, initializeVKID} from "../../../utils/OneTapVKAuth.jsx";
-
 
 
 const PersonalTab = () => {
@@ -90,11 +89,9 @@ const PersonalTab = () => {
                     setIsEmailConfirmed(data.data.is_email_confirmed)
 
                     setHasPassword(data.has_password);
-                }
-                else if (response.status === 400) {
+                } else if (response.status === 400) {
                     alert(await response.text());
-                }
-                else if (response.status === 401) {
+                } else if (response.status === 401) {
                     if (!(await verifyAndRefreshToken())) {
                         navigate("/login");
                         return;
@@ -115,7 +112,7 @@ const PersonalTab = () => {
     }, [navigate]);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setEditData((prev) => ({
             ...prev,
             [name]: value,
@@ -123,7 +120,7 @@ const PersonalTab = () => {
     };
 
     const handlePasswordChangeInput = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setPasswordData((prev) => ({
             ...prev,
             [name]: value,
@@ -173,8 +170,8 @@ const PersonalTab = () => {
                 case 400:
                     alert((await res.text()));
                     break;
-                case 401:
-                    { if (!(await verifyAndRefreshToken())) {
+                case 401: {
+                    if (!(await verifyAndRefreshToken())) {
                         await logout(navigate);
                         return;
                     }
@@ -185,7 +182,8 @@ const PersonalTab = () => {
                     } else {
                         throw new Error(`Ошибка после обновления токена: ${retryRes.status}`);
                     }
-                    break; }
+                    break;
+                }
             }
         } catch (err) {
             console.error("Ошибка сохранения:", err);
@@ -198,16 +196,13 @@ const PersonalTab = () => {
         if ("non_field_errors" in errors) {
             setNewPasswordError(true);
             setNewPasswordErrorData(errors.non_field_errors);
-        }
-        else if ("wrong_old_password" in errors) {
+        } else if ("wrong_old_password" in errors) {
             setNewPasswordError(true);
             setNewPasswordErrorData(errors.wrong_old_password);
-        }
-        else if ("confirm_password" in errors) {
+        } else if ("confirm_password" in errors) {
             setNewPasswordError(true);
             setNewPasswordErrorData(errors.confirm_password);
-        }
-        else if ("new_password" in errors) {
+        } else if ("new_password" in errors) {
             setNewPasswordError(true);
             setNewPasswordErrorData(errors.new_password);
         }
@@ -219,20 +214,20 @@ const PersonalTab = () => {
         try {
             const res = await sendEditedData(hasPassword ? "change-password" : "set-password");
             switch (res.status) {
-                case 200:
-                    { setPasswordData(INITIAL_PASSWORD_FORM_STATE);
+                case 200: {
+                    setPasswordData(INITIAL_PASSWORD_FORM_STATE);
                     const tokens = (await res.json()).data
                     localStorage.setItem("access_token", tokens.access);
                     localStorage.setItem("refresh_token", tokens.refresh);
                     setHasPassword(true);
                     navigate(0);
-                    break; }
+                    break;
+                }
                 case 400:
                     await handlePasswordError(await res.json());
                     break;
             }
-        }
-        catch (err) {
+        } catch (err) {
             console.error(err);
         }
     }
@@ -261,14 +256,12 @@ const PersonalTab = () => {
                 const short_token = (await response.json()).short_token;
                 localStorage.setItem("short_tg_token", short_token);
                 window.open(`https://t.me/socialpulsesandboxbot?start=${short_token}`, "_blank");
-            }
-            else if (response.status === 400) {
+            } else if (response.status === 400) {
                 const err = await response.text();
                 alert(err);
                 await sendForDebug(err);
             }
-        }
-        catch (err) {
+        } catch (err) {
             console.error(err);
             await sendForDebug(err);
         }
@@ -293,8 +286,7 @@ const PersonalTab = () => {
             if (res.ok) {
                 console.log(res.json())
             }
-        }
-        catch (err) {
+        } catch (err) {
             console.log(err);
         }
     }
@@ -408,7 +400,8 @@ const PersonalTab = () => {
                     <div>
                         <strong>TG:</strong>
                         <span>{personalData.tg_link || "Не привязано"}</span>
-                        {!personalData.tg_link && <button onClick={handleTGBind} className={styles.linkPlatform}>Привязать</button>}
+                        {!personalData.tg_link &&
+                            <button onClick={handleTGBind} className={styles.linkPlatform}>Привязать</button>}
                     </div>
                     <div>
                         <strong>VK:</strong>

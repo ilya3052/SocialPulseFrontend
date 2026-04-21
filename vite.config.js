@@ -1,21 +1,21 @@
-import { defineConfig } from 'vite'
+import {defineConfig} from 'vite'
 import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
-  server: {
-    host: '127.0.0.1',
-    port: 5500,
-    strictPort: true,
-    allowedHosts: ['socialpulse.sandbox.com'],  // or true for testing
+    plugins: [react()],
+    server: {
+        host: '127.0.0.1',
+        port: 5500,
+        strictPort: true,
+        allowedHosts: ['socialpulse.sandbox.com'],  // or true for testing
 
-    hmr: {
-      protocol: 'wss',              // Force secure WS
-      host: 'socialpulse.sandbox.com',
-      clientPort: 443,              // Client connects to external 443
-      timeout: 30000,               // Increase timeout if needed
-      // path: '/vite-hmr',         // Optional: only if you customize WS path
+        hmr: {
+            protocol: 'wss',              // Force secure WS
+            host: 'socialpulse.sandbox.com',
+            clientPort: 443,              // Client connects to external 443
+            timeout: 30000,               // Increase timeout if needed
+            // path: '/vite-hmr',         // Optional: only if you customize WS path
+        },
     },
-  },
 })

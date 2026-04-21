@@ -32,15 +32,15 @@ const AccountInfo = ({
     const userLink = linkField ? userSocialData?.[linkField] : null;
     let screen_name;
     if (userLink) {
-       screen_name = userLink.split('/').at(-1)
+        screen_name = userLink.split('/').at(-1)
     }
 
     const isConnected = !!userLink;
 
     // Динамический плейсхолдер
-    const placeholder = platform.alias === 'tg'
+    const placeholder = platform.alias === 'TG'
         ? 'Введите ссылку на канал Telegram...'
-        : platform.alias === 'vk'
+        : platform.alias === 'VK'
             ? 'Введите ссылку на группу ВКонтакте...'
             : 'Введите ссылку...';
 
@@ -55,10 +55,9 @@ const AccountInfo = ({
                 return;
             }
             let user_id;
-            if (platform.alias === 'tg') {
+            if (platform.alias === 'TG') {
                 user_id = localStorage.getItem("tg_id");
-            }
-            else if (platform.alias === 'vk') {
+            } else if (platform.alias === 'VK') {
                 user_id = localStorage.getItem("vk_id");
             }
             const res = await fetch(`${BASE_URL}/${API_VERSION}/accounts/group/check-access/`, {
@@ -69,29 +68,35 @@ const AccountInfo = ({
                 },
                 body: JSON.stringify({
                     groupLink: groupLink,
-                    id: user_id,
+                    user_social_id: user_id,
                     serviceAccount: serviceAccount.id,
                     platform: platform.alias
                 })
             });
             if (res.ok) {
                 const data = await res.json();
-                setGroupData({id: data['group_id'], name: data['group_name'], groupLink: groupLink, access: data['status']});
-            }
-            else if (res.status === 400) {
+                setGroupData({
+                    id: data['group_id'],
+                    name: data['group_name'],
+                    groupLink: groupLink,
+                    access: data['status']
+                });
+            } else if (res.status === 400) {
                 const data = await res.json();
                 setGroupData({msg: data['msg'], access: data['status']})
-            }
-            else if (res.status === 406 || res.status === 404) {
+            } else if (res.status === 406 || res.status === 404) {
                 const data = await res.json();
-                setGroupData({id: data['group_id'], name: data['group_name'], groupLink: groupLink, access: data['status']});
-            }
-            else {
+                setGroupData({
+                    id: data['group_id'],
+                    name: data['group_name'],
+                    groupLink: groupLink,
+                    access: data['status']
+                });
+            } else {
                 const err = await res.text();
                 await sendForDebug(err);
             }
-        }
-        catch (error) {
+        } catch (error) {
             console.error(error);
         }
         console.log(groupLink);
@@ -106,7 +111,8 @@ const AccountInfo = ({
                         <a href={userLink} target='_blank' className={styles.accountName}>
                             {screen_name ? `@${screen_name}` : 'Не привязан'}
                         </a>
-                        <span className={`${styles.accountStatus} ${isConnected ? styles.connected : styles.notConnected}`}>
+                        <span
+                            className={`${styles.accountStatus} ${isConnected ? styles.connected : styles.notConnected}`}>
                             {isConnected ? 'Привязан' : 'Не привязан'}
                         </span>
                     </div>

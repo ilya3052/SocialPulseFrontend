@@ -1,4 +1,4 @@
-import {Routes, Route, useLocation, Navigate} from 'react-router-dom';
+import {Navigate, Route, Routes, useLocation} from 'react-router-dom';
 import LoginForm from './pages/login/Login.jsx';
 import ProfileSection from './pages/profile/ProfileSection.jsx';
 
@@ -18,25 +18,25 @@ const App = () => {
     return (
         <div className="app">
 
-            {!isAuthPage && <Header />}
+            {!isAuthPage && <Header/>}
 
             <main className="main">
                 <Routes>
-                    <Route path="/login" element={<LoginForm />} />
-                    <Route path="/registration" element={<RegistrationForm />} />
+                    <Route path="/login" element={<LoginForm/>}/>
+                    <Route path="/registration" element={<RegistrationForm/>}/>
 
                     {/* Protected */}
-                    <Route element={<ProtectedLayout />}>
-                        <Route path="/" element={<Navigate to="/profile" replace />} />
-                        <Route path="/profile" element={<ProfileSection />} />
-                        <Route path="/email/activate" element={<EmailActivation />} />
-                        <Route path="/profile/groups/add" element={<AddGroup />}/>
+                    <Route element={<ProtectedLayout/>}>
+                        <Route path="/" element={<Navigate to="/profile" replace/>}/>
+                        <Route path="/profile" element={<ProfileSection/>}/>
+                        <Route path="/email/activate" element={<EmailActivation/>}/>
+                        <Route path="/profile/groups/add" element={<AddGroup/>}/>
                     </Route>
                 </Routes>
             </main>
 
-            {!isAuthPage && <Footer />}
-            </div>
+            {!isAuthPage && <Footer/>}
+        </div>
     );
 }
 

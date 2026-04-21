@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './groupCard.module.css';
 
-const GroupCard = ({ group, onDelete }) => {
+const GroupCard = ({group, onDelete}) => {
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -15,11 +15,11 @@ const GroupCard = ({ group, onDelete }) => {
     const getPlatformBadge = (platformName) => {
         const name = platformName.toLowerCase();
 
-        if (name.includes('telegram') || name.includes('pl') ) {
-            return { label: 'TG', className: styles.platformTg };
+        if (name.includes('telegram') || name.includes('pl')) {
+            return {label: 'TG', className: styles.platformTg};
         }
         if (name.includes('vk') || name.includes('вконтакте')) {
-            return { label: 'VK', className: styles.platformVk };
+            return {label: 'VK', className: styles.platformVk};
         }
 
         return {
@@ -28,7 +28,7 @@ const GroupCard = ({ group, onDelete }) => {
         };
     };
 
-    const { label, className } = getPlatformBadge(group.platform.name);
+    const {label, className} = getPlatformBadge(group.platform.name);
 
     return (
         <div className={styles.groupCard}>

@@ -31,9 +31,7 @@ const GroupsTab = () => {
             if (res.status === 204) {
                 window.location.reload();
             }
-        }
-
-        catch (err) {
+        } catch (err) {
             console.log(err);
         }
     }
@@ -56,8 +54,7 @@ const GroupsTab = () => {
                         "Content-Type": "application/json",
                     },
                 });
-            }
-            catch (err) {
+            } catch (err) {
                 console.log(err);
             }
         };
@@ -125,7 +122,7 @@ const GroupsTab = () => {
                     ))
                 ) : (
                     <p className={styles.noGroups}>
-                        У вас пока нет подключённых групп.<br />
+                        У вас пока нет подключённых групп.<br/>
                         Нажмите «Добавить группу», чтобы начать.
                     </p>
                 )}

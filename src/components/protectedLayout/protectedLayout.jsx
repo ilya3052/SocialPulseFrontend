@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import { verifyAndRefreshToken } from "../../utils/utils.js";
+import {useEffect, useState} from 'react';
+import {Navigate, Outlet} from 'react-router-dom';
+import {verifyAndRefreshToken} from "../../utils/utils.js";
 
 export default function ProtectedLayout() {
     const [checking, setChecking] = useState(true);
@@ -29,8 +29,8 @@ export default function ProtectedLayout() {
     }
 
     if (!isAuth) {
-        return <Navigate to="/login" replace />;
+        return <Navigate to="/login" replace/>;
     }
 
-    return <Outlet />;
+    return <Outlet/>;
 }

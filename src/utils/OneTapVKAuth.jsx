@@ -22,7 +22,7 @@ export const exchangeCode = async (code, deviceId) => {
 export const sendExchangedCodes = async (tokens) => {
     const res = await fetch(`${BASE_URL}/${API_VERSION}/accounts/vk/callback/`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
             access_token: tokens.access_token,
             refresh_token: tokens.refresh_token ?? null,
@@ -45,7 +45,7 @@ export const sendBindingCallback = async () => {
     const access_token = localStorage.getItem('access_token');
     const res = await fetch(`${BASE_URL}/${API_VERSION}/accounts/vk/user/`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' , 'Authorization': `Bearer ${access_token}` },
+        headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${access_token}`},
         body: JSON.stringify({
             vk_token: vk_token,
         }),
@@ -80,8 +80,7 @@ export const initializeVKID = (onSuccess, type) => {
             height: 40,
         };
         skin = 'default';
-    }
-    else if (type === "secondary") {
+    } else if (type === "secondary") {
         styles = {
             width: 40,
             height: 32

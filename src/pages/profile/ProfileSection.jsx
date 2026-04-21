@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useState} from 'react';
 import styles from './profile.module.css';
 
 import PersonalTab from './personal/PersonalTab.jsx';
@@ -25,8 +25,8 @@ const ProfileSection = () => {
             </div>
 
             <div className={styles.tabContentWrapper}>
-                {activeTab === 'personal' && <PersonalTab />}
-                {activeTab === 'groups' && <GroupsTab />}
+                {activeTab === 'personal' && <PersonalTab/>}
+                {activeTab === 'groups' && <GroupsTab/>}
             </div>
         </section>
     );

@@ -33,7 +33,7 @@
 }
 
 .noGroups {
-    grid-column: 1 / -1;           /* Главное изменение */
+    grid-column: 1 / -1; /* Главное изменение */
     text-align: center;
     padding: 4rem 2rem;
     color: #666;

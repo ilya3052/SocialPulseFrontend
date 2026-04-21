@@ -40,7 +40,7 @@ const RegistrationForm = () => {
     }, [formData.username]);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setFormData((prev) => ({
             ...prev,
             [name]: value,
@@ -53,7 +53,7 @@ const RegistrationForm = () => {
             const response = await fetch(`${BASE_URL}/${API_VERSION}/accounts/register/`, {
                 method: "POST",
                 body: JSON.stringify(data),
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json"},
             });
 
             if (response.status === 201) {
@@ -141,7 +141,7 @@ const RegistrationForm = () => {
                             onClick={() => setShowPassword(prev => !prev)}
                             tabIndex={-1}
                         >
-                            {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+                            {showPassword ? <FiEyeOff size={20}/> : <FiEye size={20}/>}
                         </button>
                     </div>
                 </div>

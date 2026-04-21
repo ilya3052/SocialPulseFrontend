@@ -1,11 +1,11 @@
 const sendForDebug = async (debug_message) => {
-        await fetch('/api/v2/accounts/debug/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                debug_message: debug_message,
-            }),
-        });
+    await fetch('/api/v2/accounts/debug/', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            debug_message: debug_message,
+        }),
+    });
 }
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -20,8 +20,8 @@ const _verifyToken = async (token) => {
     try {
         const response = await fetch(`${BASE_URL}/${API_VERSION}/accounts/token/verify/`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token }),
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({token}),
         });
         return response.ok;
     } catch (err) {
@@ -43,7 +43,7 @@ const _refreshAccessToken = async (refreshToken) => {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${refreshToken}`,
             },
-            body: JSON.stringify({ refresh: refreshToken }),
+            body: JSON.stringify({refresh: refreshToken}),
         });
 
         if (!response.ok) {
@@ -125,20 +125,19 @@ const verifyAndRefreshToken = async () => {
 
 const logout = async (navigate) => {
     const res = await fetch(`${BASE_URL}/${API_VERSION}/accounts/token/blacklist/`, {
-        method: "POST" ,
+        method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({ refresh: localStorage.getItem("refresh_token") }),
+        body: JSON.stringify({refresh: localStorage.getItem("refresh_token")}),
     });
     if (res.ok) {
         localStorage.clear();
-    }
-    else if (res.status === 400) {
+    } else if (res.status === 400) {
         const err = await res.text();
         await sendForDebug(err);
     }
     navigate('/login');
 }
 
-export { sendForDebug, BASE_URL, API_VERSION, verifyAndRefreshToken, logout};
+export {sendForDebug, BASE_URL, API_VERSION, verifyAndRefreshToken, logout};

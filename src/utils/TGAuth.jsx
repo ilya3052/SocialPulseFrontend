@@ -1,4 +1,4 @@
-import { sendForDebug } from './utils.js';
+import {sendForDebug} from './utils.js';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const API_VERSION = import.meta.env.VITE_API_VERSION;
@@ -22,8 +22,7 @@ export const handleTelegramAuth = async (user, navigate) => {
         localStorage.setItem('access_token', data.access);
         localStorage.setItem('refresh_token', data.refresh);
         navigate('/profile');
-    }
-    else {
+    } else {
         const errText = await res.text();
         await sendForDebug(errText);
     }

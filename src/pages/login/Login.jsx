@@ -1,12 +1,11 @@
 import {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
-import { FiEye, FiEyeOff } from "react-icons/fi";
+import {FiEye, FiEyeOff} from "react-icons/fi";
 
 import styles from "./login.module.css";
-import * as VKID from "@vkid/sdk";
 import {sendForDebug} from '../../utils/utils.js';
-import { initializeVKID, createVKAuthSuccessHandler } from "../../utils/OneTapVKAuth.jsx";
-import { initializeTelegramWidget, createTGAuthHandler } from "../../utils/TGAuth.jsx";
+import {createVKAuthSuccessHandler, initializeVKID} from "../../utils/OneTapVKAuth.jsx";
+import {createTGAuthHandler, initializeTelegramWidget} from "../../utils/TGAuth.jsx";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const API_VERSION = import.meta.env.VITE_API_VERSION;
@@ -28,7 +27,7 @@ const LoginForm = () => {
     }, [navigate]);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setFormData(prev => ({
             ...prev,
             [name]: value
@@ -53,13 +52,11 @@ const LoginForm = () => {
             const data = await result.json();
             localStorage.setItem('refresh_token', data.refresh);
             localStorage.setItem('access_token', data.access);
-            navigate('/profile', { replace: true });
-        }
-        else if (result.status === 400) {
+            navigate('/profile', {replace: true});
+        } else if (result.status === 400) {
             const err = await result.text();
             await sendForDebug(err);
-        }
-        else if (result.status === 401) {
+        } else if (result.status === 401) {
             setAuthError(true);
             await sendForDebug(await result.text());
         }
@@ -109,7 +106,7 @@ const LoginForm = () => {
                             onClick={() => setShowPassword(prev => !prev)}
                             tabIndex={-1}
                         >
-                            {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+                            {showPassword ? <FiEyeOff size={20}/> : <FiEye size={20}/>}
                         </button>
                     </div>
 

@@ -25,7 +25,7 @@ const AddGroup = () => {
     useEffect(() => {
         const fetchPlatforms = async () => {
             try {
-                const res = await fetch(`${BASE_URL}/${API_VERSION}/accounts/platforms/`, {
+                const res = await fetch(`${BASE_URL}/${API_VERSION}/admin/platforms/`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
@@ -35,11 +35,9 @@ const AddGroup = () => {
                     const data = await res.json();
                     setPlatforms(data);
                 }
-            }
-            catch (err) {
+            } catch (err) {
                 console.log(err);
-            }
-            finally {
+            } finally {
                 setLoadingPlatforms(false);
             }
         }
@@ -57,7 +55,7 @@ const AddGroup = () => {
                 return;
             }
             try {
-                const getUserSocialDataResponse = await fetch(`${BASE_URL}/${API_VERSION}/accounts/users/get-social/`,{
+                const getUserSocialDataResponse = await fetch(`${BASE_URL}/${API_VERSION}/accounts/users/get-social/`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -67,12 +65,10 @@ const AddGroup = () => {
                 if (getUserSocialDataResponse.ok) {
                     const socialData = await getUserSocialDataResponse.json();
                     setUserSocialData(socialData);
-                }
-                else {
+                } else {
                     throw new Error(await getUserSocialDataResponse.text());
                 }
-                            }
-            catch (err) {
+            } catch (err) {
                 console.log(err);
             }
         }
@@ -82,9 +78,8 @@ const AddGroup = () => {
     useEffect(() => {
         if (!activePlatform) return;
         const fetchServiceAccounts = async () => {
-            const params = new URLSearchParams({platform: activePlatform}).toString();
             try {
-                const getServiceAccountResponse = await fetch(`${BASE_URL}/${API_VERSION}/accounts/service-account/?${params}`, {
+                const getServiceAccountResponse = await fetch(`${BASE_URL}/${API_VERSION}/admin/service-accounts/${activePlatform}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
@@ -93,15 +88,12 @@ const AddGroup = () => {
                 if (getServiceAccountResponse.ok) {
                     const accountData = await getServiceAccountResponse.json();
                     setServiceAccount(accountData);
-                }
-                else {
+                } else {
                     throw new Error(await getServiceAccountResponse.text());
                 }
-            }
-            catch (err) {
+            } catch (err) {
                 console.log(err);
-            }
-            finally {
+            } finally {
                 setLoadingServiceAccount(false)
             }
         }
@@ -157,13 +149,11 @@ const AddGroup = () => {
             });
             if (res.status === 201) {
                 navigate("/profile");
-            }
-            else {
+            } else {
                 const data = await res.text();
                 await sendForDebug(data);
             }
-        }
-        catch (err) {
+        } catch (err) {
             console.log(err);
         }
 
@@ -205,7 +195,8 @@ const AddGroup = () => {
                     </div>
                     <div className={styles.dataRow}>
                         <span className={styles.dataLabel}>Ссылка:</span>
-                        <a href={groupData['groupLink']} target={"_blank"} className={styles.dataValue}>{groupData['groupLink']}</a>
+                        <a href={groupData['groupLink']} target={"_blank"}
+                           className={styles.dataValue}>{groupData['groupLink']}</a>
                     </div>
                     <div className={styles.dataRow}>
                         <span className={styles.dataLabel}>Статус:</span>
