@@ -37,6 +37,35 @@
     font-weight: 500;
 }
 
+.passwordWrapper {
+    position: relative;       /* ← ключевой момент */
+    width: 100%;
+}
+
+.passwordInput {
+    width: 100%;
+    padding: 10px 40px 10px 10px;  /* место для кнопки справа */
+    box-sizing: border-box;
+}
+
+.togglePassword {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #64748b;
+    padding: 0;
+    line-height: 1;
+    font-size: 20px;   /* или убери, если используешь react-icons size */
+}
+
+.togglePassword:hover,
+.passwordWrapper:focus-within .togglePassword {
+    color: #2563eb;
+}
 
 .registerBtn {
     width: 100%;

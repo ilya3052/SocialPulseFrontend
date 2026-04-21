@@ -1,10 +1,10 @@
 import {useEffect, useState} from "react";
 import {sendForDebug} from '../../utils/utils.js';
 import styles from "./registration.module.css";
-import * as VKID from "@vkid/sdk";
 import {useNavigate} from "react-router-dom";
-import { initializeVKID, createVKAuthSuccessHandler } from "../../utils/OneTapVKAuth.jsx";
-import { initializeTelegramWidget, createTGAuthHandler } from "../../utils/TGAuth.jsx";
+import {createVKAuthSuccessHandler, initializeVKID} from "../../utils/OneTapVKAuth.jsx";
+import {createTGAuthHandler, initializeTelegramWidget} from "../../utils/TGAuth.jsx";
+import {FiEye, FiEyeOff} from "react-icons/fi";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const API_VERSION = import.meta.env.VITE_API_VERSION;
@@ -16,6 +16,7 @@ const RegistrationForm = () => {
         password: '',
         password2: ''
     });
+    const [showPassword, setShowPassword] = useState(false);
 
     const navigate = useNavigate();
 
@@ -27,13 +28,11 @@ const RegistrationForm = () => {
     const [usernameError, setUsernameError] = useState("");
 
     useEffect(() => {
-        const cleanup = initializeTelegramWidget(createTGAuthHandler(navigate));
-        return cleanup;
+        return initializeTelegramWidget(createTGAuthHandler(navigate));
     }, [navigate]);
 
     useEffect(() => {
-        const cleanup = initializeVKID(createVKAuthSuccessHandler(navigate));
-        return cleanup;
+        return initializeVKID(createVKAuthSuccessHandler(navigate));
     }, [navigate]);
 
     useEffect(() => {
@@ -125,16 +124,26 @@ const RegistrationForm = () => {
 
                 <div className={styles.formGroup}>
                     <label htmlFor="password">Пароль</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        placeholder="Введите пароль"
-                        required
-                        className={styles.formControl}
-                    />
+                    <div className={styles.passwordWrapper}>
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            id="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            placeholder="Введите пароль"
+                            required
+                            className={styles.formControl}
+                        />
+                        <button
+                            type="button"
+                            className={styles.togglePassword}
+                            onClick={() => setShowPassword(prev => !prev)}
+                            tabIndex={-1}
+                        >
+                            {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+                        </button>
+                    </div>
                 </div>
 
                 <div className={styles.formGroup}>
@@ -166,7 +175,7 @@ const RegistrationForm = () => {
                 </div>
 
                 <p className={styles.loginLink}>
-                    Уже зарегистрированы? <a href="/login/Login">Войти</a>
+                    Уже зарегистрированы? <a href="/login">Войти</a>
                 </p>
             </form>
         </div>
