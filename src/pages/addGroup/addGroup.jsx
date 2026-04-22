@@ -78,11 +78,20 @@ const AddGroup = () => {
     useEffect(() => {
         if (!activePlatform) return;
         const fetchServiceAccounts = async () => {
+            let token = localStorage.getItem("access_token");
+            if (!token) {
+                if (!(await verifyAndRefreshToken())) {
+                    navigate("/login");
+                    return;
+                }
+                return;
+            }
             try {
                 const getServiceAccountResponse = await fetch(`${BASE_URL}/${API_VERSION}/admin/service-accounts/${activePlatform}`, {
                     method: 'GET',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
                     },
                 });
                 if (getServiceAccountResponse.ok) {

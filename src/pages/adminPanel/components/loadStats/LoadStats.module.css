@@ -1,0 +1,89 @@
+.adminSection {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-bottom: 2rem;
+}
+
+.adminSection h2 {
+    color: #333;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    border-bottom: 2px solid #f8f9fa;
+    padding-bottom: 0.5rem;
+}
+
+.loadStats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.loadCard {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #6c757d;
+}
+
+.loadCard h3 {
+    color: #333;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.accountInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.accountName {
+    font-weight: 500;
+    color: #333;
+}
+
+.loadPercentage {
+    font-weight: bold;
+}
+
+.low {
+    color: #28a745;
+}
+
+.medium {
+    color: #ffc107;
+}
+
+.high {
+    color: #dc3545;
+}
+
+.loadDetails {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* кнопка */
+.notifyBtn {
+    display: block;
+    margin: 0 auto;
+    width: auto;
+    min-width: 400px;
+    padding: 1rem 2rem;
+    background: #ffc107;
+    color: #212529;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.notifyBtn:hover {
+    background: #e0a800;
+}

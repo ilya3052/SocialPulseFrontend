@@ -86,6 +86,12 @@ const PersonalTab = () => {
                     const data = await response.json();
                     console.log(data);
                     setPersonalData(data.data);
+                    if (data.data.vk_id) {
+                        localStorage.setItem('vk_id', data.data.vk_id);
+                    }
+                    if (data.data.tg_id) {
+                        localStorage.setItem('tg_id', data.data.tg_id);
+                    }
                     setIsEmailConfirmed(data.data.is_email_confirmed)
 
                     setHasPassword(data.has_password);

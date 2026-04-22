@@ -52,7 +52,8 @@ const LoginForm = () => {
             const data = await result.json();
             localStorage.setItem('refresh_token', data.refresh);
             localStorage.setItem('access_token', data.access);
-            navigate('/profile', {replace: true});
+            // Редирект на главную, которая сама редиректит по роли (Admin/User)
+            navigate('/', {replace: true});
         } else if (result.status === 400) {
             const err = await result.text();
             await sendForDebug(err);
