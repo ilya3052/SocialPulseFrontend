@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import styles from './addGroup.module.css';
 import {useNavigate} from "react-router-dom";
-import {sendForDebug, verifyAndRefreshToken} from "../../utils/utils.js";
-import PlatformSelector from "../../components/addGroup-page/platformSelector/platformSelector.jsx";
-import AccountInfo from "../../components/addGroup-page/accountInfo/accountInfo.jsx";
+import {sendForDebug, verifyAndRefreshToken} from "../../../../utils/utils.js";
+import PlatformSelector from "../../components/platformSelector/platformSelector.jsx";
+import AccountInfo from "../../components/accountInfo/accountInfo.jsx";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const API_VERSION = import.meta.env.VITE_API_VERSION;

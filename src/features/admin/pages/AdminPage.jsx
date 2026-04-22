@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from "react";
 import styles from "./AdminPage.module.css";
 
-import GroupsStats from "./components/groupsStats/GroupStats";
-import AccountsStats from "./components/accountStats/AccountStats";
-import LoadStats from "./components/loadStats/LoadStats";
+import GroupsStats from "../components/groupsStats/GroupStats.jsx";
+import AccountsStats from "../components/accountStats/AccountStats.jsx";
+import LoadStats from "../components/loadStats/LoadStats.jsx";
 import {useNavigate} from "react-router-dom";
-import {API_VERSION, BASE_URL, verifyAndRefreshToken} from "../../utils/utils.js";
+import {API_VERSION, BASE_URL, verifyAndRefreshToken} from "../../../utils/utils.js";
 
 const AdminPage = () => {
 

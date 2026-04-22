@@ -1,9 +1,9 @@
 import {useEffect, useState} from "react";
-import {sendForDebug} from '../../utils/utils.js';
+import {sendForDebug} from '../../../../utils/utils.js';
 import styles from "./registration.module.css";
 import {useNavigate} from "react-router-dom";
-import {createVKAuthSuccessHandler, initializeVKID} from "../../utils/OneTapVKAuth.jsx";
-import {createTGAuthHandler, initializeTelegramWidget} from "../../utils/TGAuth.jsx";
+import {createVKAuthSuccessHandler, initializeVKID} from "../../../../utils/OneTapVKAuth.jsx";
+import {createTGAuthHandler, initializeTelegramWidget} from "../../../../utils/TGAuth.jsx";
 import {FiEye, FiEyeOff} from "react-icons/fi";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;

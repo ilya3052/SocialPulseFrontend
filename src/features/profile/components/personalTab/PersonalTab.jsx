@@ -1,8 +1,8 @@
 import styles from './personal.module.css';
 import {useEffect, useState} from "react";
-import {API_VERSION, BASE_URL, logout, sendForDebug, verifyAndRefreshToken} from "../../../utils/utils.js";
+import {API_VERSION, BASE_URL, logout, sendForDebug, verifyAndRefreshToken} from "../../../../utils/utils.js";
 import {useNavigate} from "react-router-dom";
-import {createVKAuthBindingHandler, initializeVKID} from "../../../utils/OneTapVKAuth.jsx";
+import {createVKAuthBindingHandler, initializeVKID} from "../../../../utils/OneTapVKAuth.jsx";
 
 
 const PersonalTab = () => {

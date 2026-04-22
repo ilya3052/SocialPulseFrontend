@@ -1,8 +1,8 @@
 import {useState} from 'react';
 import styles from './profile.module.css';
 
-import PersonalTab from './personal/PersonalTab.jsx';
-import GroupsTab from './groups/GroupsTab.jsx';
+import PersonalTab from '../components/personalTab/PersonalTab.jsx';
+import GroupsTab from '../components/groupsTab/GroupsTab.jsx';
 
 const ProfileSection = () => {
     const [activeTab, setActiveTab] = useState('personal');

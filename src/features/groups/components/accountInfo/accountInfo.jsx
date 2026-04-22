@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import styles from './accountInfo.module.css';
-import {sendForDebug, verifyAndRefreshToken} from "../../../utils/utils.js";
+import {sendForDebug, verifyAndRefreshToken} from "../../../../utils/utils.js";
 import {useNavigate} from "react-router-dom";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;

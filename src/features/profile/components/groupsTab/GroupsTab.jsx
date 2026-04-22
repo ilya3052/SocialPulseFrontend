@@ -1,8 +1,8 @@
 import styles from './groups.module.css';
-import {API_VERSION, BASE_URL, sendForDebug, verifyAndRefreshToken} from "../../../utils/utils.js";
+import {API_VERSION, BASE_URL, sendForDebug, verifyAndRefreshToken} from "../../../../utils/utils.js";
 import {useEffect, useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
-import GroupCard from "../../../components/profile-groups-page/groupCard/groupCard.jsx";
+import GroupCard from "../groupCard/groupCard.jsx";
 
 
 const GroupsTab = () => {

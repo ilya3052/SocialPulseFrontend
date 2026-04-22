@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import {useNavigate, useSearchParams} from "react-router-dom";
-import styles from "./EmailActivation.module.css"; // или tailwind-классы
+import styles from "./EmailActivation.module.css";
 
 const ACTIVATE_URL = `${import.meta.env.VITE_API_BASE_URL}/${import.meta.env.VITE_API_VERSION}/accounts/email/activate/`;
 

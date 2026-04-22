@@ -1,29 +1,26 @@
 import { Navigate, Route, Routes, useLocation, Outlet } from 'react-router-dom';
 
-import LoginForm from './pages/login/Login.jsx';
-import ProfileSection from './pages/profile/ProfileSection.jsx';
-import RegistrationForm from "./pages/registration/Registration.jsx";
+import LoginForm from './features/auth/login/pages/Login.jsx';
+import ProfileSection from './features/profile/pages/ProfileSection.jsx';
+import RegistrationForm from "./features/auth/registration/pages/Registration.jsx";
 import Header from "./components/header/Header.jsx";
 import Footer from "./components/footer/Footer.jsx";
-import EmailActivation from "./pages/emailActivation/EmailActivation.jsx";
-import AddGroup from "./pages/addGroup/addGroup.jsx";
-import AdminPage from "./pages/adminPanel/AdminPage.jsx";
+import EmailActivation from "./features/auth/emailActivate/pages/EmailActivation.jsx";
+import AddGroup from "./features/groups/pages/addGroup/addGroup.jsx";
+import AdminPage from "./features/admin/pages/AdminPage.jsx";
 
-import {UserContext, useUser, useUserLoading} from "./context/UserContext";
+import { useUser } from "./context/UserContext.jsx";
 
 // --- Guards ---
 
 const ProtectedLayout = () => {
-    const user = useUser();
-    const loading = useUserLoading();
+    const { user, loading } = useUser();
 
-    // 🔥 важно: ждём загрузку
     if (loading) {
         return <div>Loading...</div>;
     }
 
-    // не авторизован
-    if (user === null) {
+    if (!user) {
         return <Navigate to="/login" replace />;
     }
 
@@ -31,8 +28,8 @@ const ProtectedLayout = () => {
 };
 
 const AdminRoute = () => {
-    const user = useUser();
-    console.log('admin: ', user.is_staff);
+    const { user } = useUser();
+
     if (!user?.is_staff) {
         return <Navigate to="/profile" replace />;
     }
@@ -41,8 +38,8 @@ const AdminRoute = () => {
 };
 
 const UserRoute = () => {
-    const user = useUser();
-    console.log('user: ', user.is_staff);
+    const { user } = useUser();
+
     if (user?.is_staff) {
         return <Navigate to="/admin" replace />;
     }
@@ -51,10 +48,8 @@ const UserRoute = () => {
 };
 
 const RoleRedirect = () => {
-    const user = useUser();
-    const loading = useUserLoading();
+    const { user, loading } = useUser();
 
-    // Ждём загрузки данных перед редиректом
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -87,7 +82,6 @@ const App = () => {
                     {/* Protected */}
                     <Route element={<ProtectedLayout />}>
 
-                        {/* Редирект по роли */}
                         <Route path="/" element={<RoleRedirect />} />
 
                         {/* USER ONLY */}
@@ -101,7 +95,6 @@ const App = () => {
                             <Route path="/admin" element={<AdminPage />} />
                         </Route>
 
-                        {/* Общие */}
                         <Route path="/email/activate" element={<EmailActivation />} />
 
                     </Route>

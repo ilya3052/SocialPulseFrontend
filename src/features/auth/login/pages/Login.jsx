@@ -3,9 +3,10 @@ import {Link, useNavigate} from "react-router-dom";
 import {FiEye, FiEyeOff} from "react-icons/fi";
 
 import styles from "./login.module.css";
-import {sendForDebug} from '../../utils/utils.js';
-import {createVKAuthSuccessHandler, initializeVKID} from "../../utils/OneTapVKAuth.jsx";
-import {createTGAuthHandler, initializeTelegramWidget} from "../../utils/TGAuth.jsx";
+import {sendForDebug} from '../../../../utils/utils.js';
+import {createVKAuthSuccessHandler, initializeVKID} from "../../../../utils/OneTapVKAuth.jsx";
+import {createTGAuthHandler, initializeTelegramWidget} from "../../../../utils/TGAuth.jsx";
+import {useUser} from "../../../../context/UserContext.jsx";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const API_VERSION = import.meta.env.VITE_API_VERSION;
@@ -17,56 +18,62 @@ const LoginForm = () => {
     });
 
     const navigate = useNavigate();
+    const { refetchUser } = useUser(); // 🔥 ключевой момент
 
     const [authError, setAuthError] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
-        const cleanup = initializeTelegramWidget(createTGAuthHandler(navigate));
-        return cleanup;
+        return initializeTelegramWidget(createTGAuthHandler(navigate));
+    }, [navigate]);
+
+    useEffect(() => {
+        return initializeVKID(createVKAuthSuccessHandler(navigate), 'primary');
     }, [navigate]);
 
     const handleChange = (e) => {
-        const {name, value} = e.target;
+        const { name, value } = e.target;
+
         setFormData(prev => ({
             ...prev,
             [name]: value
         }));
-        if (authError) {
-            setAuthError(false);
-        }
+
+        if (authError) setAuthError(false);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         await sendLoginRequest(formData);
-    }
+    };
 
     const sendLoginRequest = async (data) => {
         const result = await fetch(`${BASE_URL}/${API_VERSION}/accounts/token/`, {
             method: 'POST',
             body: JSON.stringify(data),
-            headers: {'Content-Type': 'application/json'}
+            headers: { 'Content-Type': 'application/json' }
         });
+
         if (result.status === 200) {
             const data = await result.json();
+
             localStorage.setItem('refresh_token', data.refresh);
             localStorage.setItem('access_token', data.access);
-            // Редирект на главную, которая сама редиректит по роли (Admin/User)
-            navigate('/', {replace: true});
+
+            // 🔥 КРИТИЧНО: синхронизируем пользователя
+            await refetchUser();
+
+            navigate('/', { replace: true });
+
         } else if (result.status === 400) {
             const err = await result.text();
             await sendForDebug(err);
+
         } else if (result.status === 401) {
             setAuthError(true);
             await sendForDebug(await result.text());
         }
-    }
-
-    useEffect(() => {
-        const cleanup = initializeVKID(createVKAuthSuccessHandler(navigate), 'primary');
-        return cleanup;
-    }, [navigate]);
+    };
 
     return (
         <div className={styles.loginContainer}>
