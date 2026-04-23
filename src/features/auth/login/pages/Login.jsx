@@ -48,7 +48,7 @@ const LoginForm = () => {
     };
 
     const sendLoginRequest = async (data) => {
-        const result = await fetch(`${BASE_URL}/${API_VERSION}/accounts/token/`, {
+        const result = await fetch(`${BASE_URL}/${API_VERSION}/auth/token/`, {
             method: 'POST',
             body: JSON.stringify(data),
             headers: { 'Content-Type': 'application/json' }

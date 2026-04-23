@@ -1,7 +1,6 @@
-import {sendForDebug} from './utils.js';
+import {API_VERSION, BASE_URL, sendForDebug} from './utils.js';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const API_VERSION = import.meta.env.VITE_API_VERSION;
+
 
 /**
  * Обработчик успешной авторизации через Telegram
@@ -10,7 +9,7 @@ export const handleTelegramAuth = async (user, navigate) => {
     // user содержит:
     // id, first_name, last_name, username, photo_url, auth_date, hash
     const params = new URLSearchParams(user).toString();
-    const res = await fetch(`${BASE_URL}/${API_VERSION}/accounts/tg/callback/?${params}`, {
+    const res = await fetch(`${BASE_URL}/${API_VERSION}/auth/tg/callback/?${params}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

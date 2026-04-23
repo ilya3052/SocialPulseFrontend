@@ -1,5 +1,5 @@
 const sendForDebug = async (debug_message) => {
-    await fetch('/api/v3/accounts/debug/', {
+    await fetch('debug/', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -18,7 +18,7 @@ const API_VERSION = import.meta.env.VITE_API_VERSION;
  */
 const _verifyToken = async (token) => {
     try {
-        const response = await fetch(`${BASE_URL}/${API_VERSION}/accounts/token/verify/`, {
+        const response = await fetch(`${BASE_URL}/${API_VERSION}/auth/token/verify/`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({token}),
@@ -37,7 +37,7 @@ const _verifyToken = async (token) => {
  */
 const _refreshAccessToken = async (refreshToken) => {
     try {
-        const response = await fetch(`${BASE_URL}/${API_VERSION}/accounts/token/refresh/`, {
+        const response = await fetch(`${BASE_URL}/${API_VERSION}/auth/token/refresh/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -124,7 +124,7 @@ const verifyAndRefreshToken = async () => {
 };
 
 const logout = async (navigate) => {
-    const res = await fetch(`${BASE_URL}/${API_VERSION}/accounts/token/blacklist/`, {
+    const res = await fetch(`${BASE_URL}/${API_VERSION}/auth/token/blacklist/`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

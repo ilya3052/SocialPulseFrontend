@@ -21,7 +21,7 @@ const GroupsTab = () => {
                 }
                 return;
             }
-            const res = await fetch(`${BASE_URL}/${API_VERSION}/accounts/groups/${groupID}`, {
+            const res = await fetch(`${BASE_URL}/${API_VERSION}/social-entities/groups/${groupID}`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
@@ -47,7 +47,7 @@ const GroupsTab = () => {
                 return;
             }
             try {
-                return await fetch(`${BASE_URL}/${API_VERSION}/accounts/groups/`, {
+                return await fetch(`${BASE_URL}/${API_VERSION}/social-entities/groups/`, {
                     method: "GET",
                     headers: {
                         "Authorization": `Bearer ${token}`,

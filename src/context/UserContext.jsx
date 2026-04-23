@@ -21,7 +21,7 @@ export const UserProvider = ({ children }) => {
                 return;
             }
 
-            const res = await fetch(`${BASE_URL}/${API_VERSION}/accounts/users/me/`, {
+            const res = await fetch(`${BASE_URL}/${API_VERSION}/users/me/`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -35,10 +35,6 @@ export const UserProvider = ({ children }) => {
             }
 
             const data = await res.json();
-
-            // ⚠️ проверь структуру ответа API
-            // если у тебя { data: {...} } → оставь data.data
-            // если просто {...} → замени на setUser(data)
             setUser(data.data);
 
         } catch (e) {

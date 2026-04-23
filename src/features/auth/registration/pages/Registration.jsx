@@ -50,7 +50,7 @@ const RegistrationForm = () => {
     const sendRegistrationRequest = async (data) => {
         try {
 
-            const response = await fetch(`${BASE_URL}/${API_VERSION}/accounts/register/`, {
+            const response = await fetch(`${BASE_URL}/${API_VERSION}/users/register/`, {
                 method: "POST",
                 body: JSON.stringify(data),
                 headers: {"Content-Type": "application/json"},

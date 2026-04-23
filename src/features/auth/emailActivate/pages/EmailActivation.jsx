@@ -1,8 +1,8 @@
 import {useEffect, useState} from "react";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import styles from "./EmailActivation.module.css";
+import {API_VERSION, BASE_URL} from "../../../../utils/utils.js";
 
-const ACTIVATE_URL = `${import.meta.env.VITE_API_BASE_URL}/${import.meta.env.VITE_API_VERSION}/accounts/email/activate/`;
 
 export default function EmailActivation() {
     const navigate = useNavigate();
@@ -30,7 +30,7 @@ export default function EmailActivation() {
         setMessage("");
 
         try {
-            const res = await fetch(ACTIVATE_URL, {
+            const res = await fetch(`${BASE_URL}/${API_VERSION}/auth/email/activate/`, {
                 method: "POST",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({token: t}),

@@ -58,7 +58,7 @@ const PersonalTab = () => {
     }, [navigate]);
 
     const getUserData = async (token) => {
-        const response = await fetch(`${BASE_URL}/${API_VERSION}/accounts/users/me/`, {
+        const response = await fetch(`${BASE_URL}/${API_VERSION}/users/me/`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -139,15 +139,15 @@ const PersonalTab = () => {
         let dataToEdit;
         switch (type) {
             case "personal":
-                url = `${BASE_URL}/${API_VERSION}/accounts/users/me/`;
+                url = `${BASE_URL}/${API_VERSION}/users/me/`;
                 dataToEdit = editData;
                 break;
             case "change-password":
-                url = `${BASE_URL}/${API_VERSION}/accounts/users/change-password/`;
+                url = `${BASE_URL}/${API_VERSION}/users/change-password/`;
                 dataToEdit = passwordData;
                 break;
             case "set-password":
-                url = `${BASE_URL}/${API_VERSION}/accounts/users/set-password/`;
+                url = `${BASE_URL}/${API_VERSION}/users/set-password/`;
                 dataToEdit = passwordData;
                 break;
 
@@ -247,7 +247,7 @@ const PersonalTab = () => {
         try {
             const access_token = localStorage.getItem("access_token");
             const refresh_token = localStorage.getItem("refresh_token");
-            const response = await fetch(`${BASE_URL}/${API_VERSION}/accounts/tg/token/short/`, {
+            const response = await fetch(`${BASE_URL}/${API_VERSION}/auth/tg/token/short/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -285,7 +285,7 @@ const PersonalTab = () => {
             }
             localStorage.setItem("pending-email", personalData.email);
 
-            const res = await fetch(`${BASE_URL}/${API_VERSION}/accounts/email/send/`, {
+            const res = await fetch(`${BASE_URL}/${API_VERSION}/auth/email/send/`, {
                 method: "GET",
                 headers: {'Authorization': `Bearer ${localStorage.getItem("access_token")}`,}
             });

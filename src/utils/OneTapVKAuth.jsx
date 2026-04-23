@@ -1,12 +1,9 @@
 import * as VKID from '@vkid/sdk';
-import {sendForDebug} from './utils.js';
+import {API_VERSION, BASE_URL, sendForDebug} from './utils.js';
 
 /**
  * Обмен code и deviceId на VK токены
  */
-
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const API_VERSION = import.meta.env.VITE_API_VERSION;
 
 export const exchangeCode = async (code, deviceId) => {
     const tokens = await VKID.Auth.exchangeCode(code, deviceId);
@@ -20,7 +17,7 @@ export const exchangeCode = async (code, deviceId) => {
  * Отправка обменённых токенов на бэкенд
  */
 export const sendExchangedCodes = async (tokens) => {
-    const res = await fetch(`${BASE_URL}/${API_VERSION}/accounts/vk/callback/`, {
+    const res = await fetch(`${BASE_URL}/${API_VERSION}/auth/vk/callback/`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -43,7 +40,7 @@ export const sendExchangedCodes = async (tokens) => {
 export const sendBindingCallback = async () => {
     const vk_token = localStorage.getItem('vk_access_token');
     const access_token = localStorage.getItem('access_token');
-    const res = await fetch(`${BASE_URL}/${API_VERSION}/accounts/vk/user/`, {
+    const res = await fetch(`${BASE_URL}/${API_VERSION}/auth/vk/user/`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json', 'Authorization': `Bearer ${access_token}`},
         body: JSON.stringify({

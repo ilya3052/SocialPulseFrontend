@@ -25,7 +25,7 @@ const AddGroup = () => {
     useEffect(() => {
         const fetchPlatforms = async () => {
             try {
-                const res = await fetch(`${BASE_URL}/${API_VERSION}/admin/platforms/`, {
+                const res = await fetch(`${BASE_URL}/${API_VERSION}/social-entities/platforms/`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
@@ -55,7 +55,7 @@ const AddGroup = () => {
                 return;
             }
             try {
-                const getUserSocialDataResponse = await fetch(`${BASE_URL}/${API_VERSION}/accounts/users/get-social/`, {
+                const getUserSocialDataResponse = await fetch(`${BASE_URL}/${API_VERSION}/users/get-social/`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -87,7 +87,7 @@ const AddGroup = () => {
                 return;
             }
             try {
-                const getServiceAccountResponse = await fetch(`${BASE_URL}/${API_VERSION}/admin/service-accounts/${activePlatform}`, {
+                const getServiceAccountResponse = await fetch(`${BASE_URL}/${API_VERSION}/service-accounts/${activePlatform}/`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -141,7 +141,7 @@ const AddGroup = () => {
                 }
                 return;
             }
-            const res = await fetch(`${BASE_URL}/${API_VERSION}/accounts/groups/`, {
+            const res = await fetch(`${BASE_URL}/${API_VERSION}/social-entities/groups/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
