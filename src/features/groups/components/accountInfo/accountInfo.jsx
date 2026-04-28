@@ -1,10 +1,7 @@
 import React, {useState} from 'react';
 import styles from './accountInfo.module.css';
-import {sendForDebug, verifyAndRefreshToken} from "../../../../utils/utils.js";
+import {API_VERSION, BASE_URL, sendForDebug, verifyAndRefreshToken} from "../../../../utils/utils.js";
 import {useNavigate} from "react-router-dom";
-
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const API_VERSION = import.meta.env.VITE_API_VERSION;
 
 const AccountInfo = ({
                          platform,           // объект платформы { id, name, alias }
@@ -23,7 +20,7 @@ const AccountInfo = ({
         return <div className={styles.loading}>Загрузка платформ...</div>;
     }
     if (!platform) return null;
-
+    if (!serviceAccount) return null;
     const isActive = activePlatform === platform.alias;
 
     const linkField = platform.alias === 'TG' ? 'tg_link' :
@@ -134,9 +131,9 @@ const AccountInfo = ({
                     value={groupLink}                    // ← важно!
                     onChange={(e) => setGroupLink(e.target.value)}
                 />
-                <button onClick={fetchGroupData} className={styles.requestDataBtn}>
+                {serviceAccount ? <button onClick={fetchGroupData} className={styles.requestDataBtn}>
                     Запросить данные
-                </button>
+                </button> : 'Нет сервисного аккаунта для этой платформы, обратитесь к администратору'}
             </div>
         </div>
     );
