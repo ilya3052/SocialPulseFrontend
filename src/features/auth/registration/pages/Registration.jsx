@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import {useUser} from "../../../../context/UserContext.jsx";
 import {sendForDebug} from '../../../../utils/utils.js';
 import styles from "./registration.module.css";
 import {useNavigate} from "react-router-dom";
@@ -19,6 +20,7 @@ const RegistrationForm = () => {
     const [showPassword, setShowPassword] = useState(false);
 
     const navigate = useNavigate();
+    const { refetchUser } = useUser();
 
     const passwordError =
         formData.password2 && formData.password !== formData.password2
@@ -28,12 +30,12 @@ const RegistrationForm = () => {
     const [usernameError, setUsernameError] = useState("");
 
     useEffect(() => {
-        return initializeTelegramWidget(createTGAuthHandler(navigate));
-    }, [navigate]);
+        return initializeTelegramWidget(createTGAuthHandler(navigate, refetchUser));
+    }, [navigate, refetchUser]);
 
     useEffect(() => {
-        return initializeVKID(createVKAuthSuccessHandler(navigate));
-    }, [navigate]);
+        return initializeVKID(createVKAuthSuccessHandler(navigate, refetchUser));
+    }, [navigate, refetchUser]);
 
     useEffect(() => {
         setUsernameError("");
@@ -49,7 +51,6 @@ const RegistrationForm = () => {
 
     const sendRegistrationRequest = async (data) => {
         try {
-
             const response = await fetch(`${BASE_URL}/${API_VERSION}/users/register/`, {
                 method: "POST",
                 body: JSON.stringify(data),
@@ -60,6 +61,8 @@ const RegistrationForm = () => {
                 const result = await response.json();
                 localStorage.setItem("access_token", result.tokens.access);
                 localStorage.setItem("refresh_token", result.tokens.refresh);
+                // Синхронизируем пользователя
+                await refetchUser();
                 navigate("/profile");
             } else if (response.status === 400) {
                 const err = await response.json();
