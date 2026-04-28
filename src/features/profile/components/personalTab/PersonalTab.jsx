@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import {API_VERSION, BASE_URL, logout, sendForDebug, verifyAndRefreshToken} from "../../../../utils/utils.js";
 import {useNavigate} from "react-router-dom";
 import {createVKAuthBindingHandler, initializeVKID} from "../../../../utils/OneTapVKAuth.jsx";
+import { useUser } from "../../../../context/UserContext.jsx";
 
 
 const PersonalTab = () => {
@@ -22,10 +23,6 @@ const PersonalTab = () => {
         tg_link: "",
         vk_id: "",
         vk_link: ""
-    }
-
-    const SERVICE_DATA = {
-        is_email_confirmed: false,
     }
 
     const [hasPassword, setHasPassword] = useState(false);
@@ -51,21 +48,20 @@ const PersonalTab = () => {
     const [isEmailConfirmed, setIsEmailConfirmed] = useState(false);
 
     const navigate = useNavigate();
+    const { refetchUser } = useUser();
 
     useEffect(() => {
-        const cleanup = initializeVKID(createVKAuthBindingHandler(navigate), 'secondary');
-        return cleanup;
-    }, [navigate]);
+        return initializeVKID(createVKAuthBindingHandler(navigate, refetchUser), 'secondary');
+    }, [navigate, refetchUser]);
 
     const getUserData = async (token) => {
-        const response = await fetch(`${BASE_URL}/${API_VERSION}/users/me/`, {
+        return await fetch(`${BASE_URL}/${API_VERSION}/users/me/`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
                 "Content-Type": "application/json",
             },
         });
-        return response;
     }
 
     useEffect(() => {
@@ -88,6 +84,9 @@ const PersonalTab = () => {
                     setPersonalData(data.data);
                     if (data.data.vk_id) {
                         localStorage.setItem('vk_id', data.data.vk_id);
+                        localStorage.setItem('vk_access_token', data.tokens.access_vk_token)
+                        localStorage.setItem('vk_refresh_token', data.tokens.refresh_vk_token)
+                        localStorage.setItem('vk_id_token', data.tokens.id_vk_token)
                     }
                     if (data.data.tg_id) {
                         localStorage.setItem('tg_id', data.data.tg_id);
@@ -152,7 +151,7 @@ const PersonalTab = () => {
                 break;
 
         }
-        const response = await fetch(url, {
+        return await fetch(url, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
@@ -160,7 +159,6 @@ const PersonalTab = () => {
             },
             body: JSON.stringify(dataToEdit),
         });
-        return response;
     }
 
     const handleSubmit = async (e) => {

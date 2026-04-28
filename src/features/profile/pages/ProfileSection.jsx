@@ -1,24 +1,39 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
+import {useSearchParams} from 'react-router-dom';
 import styles from './profile.module.css';
 
 import PersonalTab from '../components/personalTab/PersonalTab.jsx';
 import GroupsTab from '../components/groupsTab/GroupsTab.jsx';
 
 const ProfileSection = () => {
-    const [activeTab, setActiveTab] = useState('personal');
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [activeTab, setActiveTab] = useState(() => {
+        const tab = searchParams.get('tab');
+        return tab === 'groups' ? 'groups' : 'personal';
+    });
+
+    useEffect(() => {
+        const tab = searchParams.get('tab');
+        setActiveTab(tab === 'groups' ? 'groups' : 'personal');
+    }, [searchParams]);
+
+    const handleTabChange = (tab) => {
+        setActiveTab(tab);
+        setSearchParams({ tab });
+    };
 
     return (
         <section className={styles.profileSection}>
             <div className={styles.tabs}>
                 <button
                     className={`${styles.tabBtn} ${activeTab === 'personal' ? styles.active : ''}`}
-                    onClick={() => setActiveTab('personal')}
+                    onClick={() => handleTabChange('personal')}
                 >
                     Личные данные
                 </button>
                 <button
                     className={`${styles.tabBtn} ${activeTab === 'groups' ? styles.active : ''}`}
-                    onClick={() => setActiveTab('groups')}
+                    onClick={() => handleTabChange('groups')}
                 >
                     Группы
                 </button>
