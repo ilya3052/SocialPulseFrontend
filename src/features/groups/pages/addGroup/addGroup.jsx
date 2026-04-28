@@ -95,11 +95,9 @@ const AddGroup = () => {
                 if (getServiceAccountResponse.ok) {
                     const accountData = await getServiceAccountResponse.json();
                     setServiceAccount(accountData);
-                }
-                else if (getServiceAccountResponse.status === 404) {
+                } else if (getServiceAccountResponse.status === 404) {
                     setServiceAccount(null);
-                }
-                else {
+                } else {
                     throw new Error(await getServiceAccountResponse.text());
                 }
             } catch (err) {
@@ -186,17 +184,17 @@ const AddGroup = () => {
 
             {/* Блок 2: Информация об аккаунтах */}
             {activePlatform && (serviceAccount ? <section className={styles.section}>
-                <h2>Информация об аккаунтах</h2>
-                <AccountInfo
-                    platform={platforms.find(p => p.alias === activePlatform)}
-                    activePlatform={activePlatform}
-                    userSocialData={userSocialData}
-                    loading={loadingServiceAccount}
-                    serviceAccount={serviceAccount}
-                    setGroupData={setGroupData}
-                />
-            </section>
-             : <h3>Не найден сервисный аккаунт для платформы, обратитесь к администратору</h3>)}
+                    <h2>Информация об аккаунтах</h2>
+                    <AccountInfo
+                        platform={platforms.find(p => p.alias === activePlatform)}
+                        activePlatform={activePlatform}
+                        userSocialData={userSocialData}
+                        loading={loadingServiceAccount}
+                        serviceAccount={serviceAccount}
+                        setGroupData={setGroupData}
+                    />
+                </section>
+                : <h3>Не найден сервисный аккаунт для платформы, обратитесь к администратору</h3>)}
             {groupData && <section className={styles.section}>
                 <h2>Данные о группе</h2>
                 <div className={styles.groupData}>

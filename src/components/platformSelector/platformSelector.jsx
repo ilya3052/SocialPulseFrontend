@@ -1,16 +1,15 @@
 import React from 'react';
-import styles from './platformSelector.module.css'; // подставь свой путь
+import styles from './platformSelector.module.css';
 
 const PlatformSelector = ({
-                              platforms,        // массив [{id, name, alias}, ...]
-                              activePlatform,   // строка, например 'tg'
-                              setActivePlatform, // функция
+                              platforms,
+                              activePlatform,
+                              setActivePlatform,
                               loading = false
                           }) => {
     if (loading) {
-        return <div className={styles.loading}>Загрузка платформ...</div>; // или скелетон
+        return <div className={styles.loading}>Загрузка платформ...</div>;
     }
-
     if (!platforms || platforms.length === 0) {
         return <div>Платформы не найдены</div>;
     }

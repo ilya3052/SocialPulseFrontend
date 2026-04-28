@@ -1,14 +1,13 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {createContext, useContext, useEffect, useState} from "react";
 import {API_VERSION, BASE_URL, verifyAndRefreshToken} from "../utils/utils.js";
 
 export const UserContext = createContext(null);
 
 export const useUser = () => useContext(UserContext);
 
-export const UserProvider = ({ children }) => {
+export const UserProvider = ({children}) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
-
 
 
     const fetchUser = async () => {
@@ -58,7 +57,7 @@ export const UserProvider = ({ children }) => {
     }, []);
 
     return (
-        <UserContext.Provider value={{ user, loading, refetchUser: fetchUser, setUser }}>
+        <UserContext.Provider value={{user, loading, refetchUser: fetchUser, setUser}}>
             {children}
         </UserContext.Provider>
     );

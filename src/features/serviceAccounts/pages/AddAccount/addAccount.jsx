@@ -13,8 +13,7 @@ const AddAccountPage = () => {
     const [activePlatform, setActivePlatform] = useState(null);
     const [loadingPlatforms, setLoadingPlatforms] = useState(true);
 
-    
-    
+
     const navigate = useNavigate();
 
     const fetchPlatforms = async () => {

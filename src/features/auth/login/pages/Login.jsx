@@ -18,7 +18,7 @@ const LoginForm = () => {
     });
 
     const navigate = useNavigate();
-    const { refetchUser } = useUser();
+    const {refetchUser} = useUser();
 
     const [authError, setAuthError] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -32,7 +32,7 @@ const LoginForm = () => {
     }, [navigate, refetchUser]);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
 
         setFormData(prev => ({
             ...prev,
@@ -51,7 +51,7 @@ const LoginForm = () => {
         const result = await fetch(`${BASE_URL}/${API_VERSION}/auth/token/`, {
             method: 'POST',
             body: JSON.stringify(data),
-            headers: { 'Content-Type': 'application/json' }
+            headers: {'Content-Type': 'application/json'}
         });
 
         if (result.status === 200) {
@@ -63,7 +63,7 @@ const LoginForm = () => {
             // 🔥 КРИТИЧНО: синхронизируем пользователя
             await refetchUser();
 
-            navigate('/', { replace: true });
+            navigate('/', {replace: true});
 
         } else if (result.status === 400) {
             const err = await result.text();

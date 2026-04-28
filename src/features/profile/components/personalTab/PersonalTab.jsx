@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {API_VERSION, BASE_URL, logout, sendForDebug, verifyAndRefreshToken} from "../../../../utils/utils.js";
 import {useNavigate} from "react-router-dom";
 import {createVKAuthBindingHandler, initializeVKID} from "../../../../utils/OneTapVKAuth.jsx";
-import { useUser } from "../../../../context/UserContext.jsx";
+import {useUser} from "../../../../context/UserContext.jsx";
 
 
 const PersonalTab = () => {
@@ -48,7 +48,7 @@ const PersonalTab = () => {
     const [isEmailConfirmed, setIsEmailConfirmed] = useState(false);
 
     const navigate = useNavigate();
-    const { refetchUser } = useUser();
+    const {refetchUser} = useUser();
 
     useEffect(() => {
         return initializeVKID(createVKAuthBindingHandler(navigate, refetchUser), 'secondary');

@@ -48,8 +48,7 @@ const ServiceAccounts = () => {
                 }
             });
             return res.status === 204;
-        }
-        catch (e) {
+        } catch (e) {
             console.log(e);
             await sendForDebug(e);
             return false;

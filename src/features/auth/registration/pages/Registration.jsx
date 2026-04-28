@@ -20,7 +20,7 @@ const RegistrationForm = () => {
     const [showPassword, setShowPassword] = useState(false);
 
     const navigate = useNavigate();
-    const { refetchUser } = useUser();
+    const {refetchUser} = useUser();
 
     const passwordError =
         formData.password2 && formData.password !== formData.password2

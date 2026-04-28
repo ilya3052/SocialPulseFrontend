@@ -1,7 +1,6 @@
 import {API_VERSION, BASE_URL, sendForDebug} from './utils.js';
 
 
-
 /**
  * Обработчик успешной авторизации через Telegram
  */

@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {useSearchParams} from 'react-router-dom';
 import styles from './profile.module.css';
 
@@ -19,7 +19,7 @@ const ProfileSection = () => {
 
     const handleTabChange = (tab) => {
         setActiveTab(tab);
-        setSearchParams({ tab });
+        setSearchParams({tab});
     };
 
     return (

@@ -41,9 +41,7 @@ const DataForm = ({platform}) => {
                     "name": accountName,
                     "platform_id": platform.id,
                     "app_id": appID,
-                    data: {
-
-                    }
+                    data: {}
                 };
             }
             console.log(data);

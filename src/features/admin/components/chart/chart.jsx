@@ -1,11 +1,11 @@
-import { Pie } from 'react-chartjs-2';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import {Pie} from 'react-chartjs-2';
+import {ArcElement, Chart as ChartJS, Legend, Tooltip} from 'chart.js';
 import styles from './chart.module.css';
 
 // Регистрируем необходимые компоненты Chart.js
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const PlatformChart = ({ groupStats }) => {
+const PlatformChart = ({groupStats}) => {
     // 1. Нормализуем входные данные (важно!)
     const vkCount = Number(groupStats?.vk_count) || 0;
     const tgCount = Number(groupStats?.tg_count) || 0;
@@ -50,7 +50,7 @@ const PlatformChart = ({ groupStats }) => {
             },
             tooltip: {
                 callbacks: {
-                    label: function(context) {
+                    label: function (context) {
                         const label = context.label;
                         const value = context.raw;
 
@@ -72,7 +72,7 @@ const PlatformChart = ({ groupStats }) => {
 
             <div className={styles.chartPlaceholder}>
                 <div className={styles.pieChart}>
-                    <Pie data={chartData} options={chartOptions} />
+                    <Pie data={chartData} options={chartOptions}/>
                 </div>
 
                 <div className={styles.chartLegend}>

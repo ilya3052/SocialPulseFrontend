@@ -43,7 +43,8 @@ const LoadStats = ({stats, groupStats}) => {
 
                     <div className={styles.accountInfo}>
                         <span className={styles.accountName}>{account_with_maximum_usage.name}</span>
-                        <span className={`${styles.loadPercentage} ${getStyleByPercentage(max_usage_acc_loading_percentage)}`}>
+                        <span
+                            className={`${styles.loadPercentage} ${getStyleByPercentage(max_usage_acc_loading_percentage)}`}>
               {max_usage_acc_loading_percentage}%
             </span>
                     </div>
