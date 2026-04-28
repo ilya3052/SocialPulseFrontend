@@ -104,7 +104,7 @@ export const initializeVKID = (onSuccess, type) => {
 /**
  * Обработчик успешной авторизации через VK (используется как callback для initializeVKID)
  */
-export const createVKAuthSuccessHandler = (navigate) => {
+export const createVKAuthSuccessHandler = (navigate, refetchUser) => {
     return async (payload) => {
         const code = payload.code;
         const deviceId = payload.device_id;
@@ -124,15 +124,21 @@ export const createVKAuthSuccessHandler = (navigate) => {
             localStorage.setItem('access_token', access_token);
             localStorage.setItem('refresh_token', refresh_token);
             localStorage.setItem('vk_id', vk_id);
+            if (typeof refetchUser === 'function') {
+                await refetchUser();
+            }
         } catch (error) {
             await sendForDebug(error);
             return;
+        }
+        if (typeof refetchUser === 'function') {
+            await refetchUser();
         }
         navigate('/profile');
     };
 };
 
-export const createVKAuthBindingHandler = (navigate) => {
+export const createVKAuthBindingHandler = (navigate, refetchUser) => {
     return async (payload) => {
         const code = payload.code;
         const deviceId = payload.device_id;
@@ -144,10 +150,11 @@ export const createVKAuthBindingHandler = (navigate) => {
             const tokens = await exchangeCode(code, deviceId);
             await sendExchangedCodes(tokens);
             await sendBindingCallback();
+            if (typeof refetchUser === 'function') {
+                await refetchUser();
+            }
         } catch (error) {
             await sendForDebug(error);
-            return;
         }
-        navigate('/profile');
     }
 }

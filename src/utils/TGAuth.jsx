@@ -5,7 +5,7 @@ import {API_VERSION, BASE_URL, sendForDebug} from './utils.js';
 /**
  * Обработчик успешной авторизации через Telegram
  */
-export const handleTelegramAuth = async (user, navigate) => {
+export const handleTelegramAuth = async (user, navigate, refetchUser) => {
     // user содержит:
     // id, first_name, last_name, username, photo_url, auth_date, hash
     const params = new URLSearchParams(user).toString();
@@ -20,6 +20,9 @@ export const handleTelegramAuth = async (user, navigate) => {
         console.log(data);
         localStorage.setItem('access_token', data.access);
         localStorage.setItem('refresh_token', data.refresh);
+        if (typeof refetchUser === 'function') {
+            await refetchUser();
+        }
         navigate('/profile');
     } else {
         const errText = await res.text();
@@ -30,9 +33,9 @@ export const handleTelegramAuth = async (user, navigate) => {
 /**
  * Создаёт callback функцию для обработчика Telegram авторизации
  */
-export const createTGAuthHandler = (navigate) => {
+export const createTGAuthHandler = (navigate, refetchUser) => {
     return async (user) => {
-        await handleTelegramAuth(user, navigate);
+        await handleTelegramAuth(user, navigate, refetchUser);
     };
 };
 

@@ -1,5 +1,10 @@
+
+
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_VERSION = import.meta.env.VITE_API_VERSION;
+
 const sendForDebug = async (debug_message) => {
-    await fetch('debug/', {
+    await fetch(`${BASE_URL}/${API_VERSION}/debug/`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -7,9 +12,6 @@ const sendForDebug = async (debug_message) => {
         }),
     });
 }
-
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const API_VERSION = import.meta.env.VITE_API_VERSION;
 
 /**
  * Проверяет валидность переданного токена через API
