@@ -18,7 +18,7 @@ const LoginForm = () => {
     });
 
     const navigate = useNavigate();
-    const { refetchUser } = useUser(); // 🔥 ключевой момент
+    const { refetchUser } = useUser();
 
     const [authError, setAuthError] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -28,8 +28,8 @@ const LoginForm = () => {
     }, [navigate]);
 
     useEffect(() => {
-        return initializeVKID(createVKAuthSuccessHandler(navigate), 'primary');
-    }, [navigate]);
+        return initializeVKID(createVKAuthSuccessHandler(navigate, refetchUser), 'primary');
+    }, [navigate, refetchUser]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
