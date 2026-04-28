@@ -1,12 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import styles from './addGroup.module.css';
 import {useNavigate} from "react-router-dom";
-import {sendForDebug, verifyAndRefreshToken} from "../../../../utils/utils.js";
-import PlatformSelector from "../../components/platformSelector/platformSelector.jsx";
+import {API_VERSION, BASE_URL, sendForDebug, verifyAndRefreshToken} from "../../../../utils/utils.js";
+import PlatformSelector from "../../../../components/platformSelector/platformSelector.jsx";
 import AccountInfo from "../../components/accountInfo/accountInfo.jsx";
-
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const API_VERSION = import.meta.env.VITE_API_VERSION;
 
 const AddGroup = () => {
     const [platforms, setPlatforms] = useState([]);
@@ -22,25 +19,26 @@ const AddGroup = () => {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchPlatforms = async () => {
-            try {
-                const res = await fetch(`${BASE_URL}/${API_VERSION}/social-entities/platforms/`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    setPlatforms(data);
+    const fetchPlatforms = async () => {
+        try {
+            const res = await fetch(`${BASE_URL}/${API_VERSION}/social-entities/platforms/`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
                 }
-            } catch (err) {
-                console.log(err);
-            } finally {
-                setLoadingPlatforms(false);
+            });
+            if (res.ok) {
+                const data = await res.json();
+                setPlatforms(data);
             }
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setLoadingPlatforms(false);
         }
+    }
+
+    useEffect(() => {
         fetchPlatforms();
     }, [navigate])
 
@@ -87,7 +85,7 @@ const AddGroup = () => {
                 return;
             }
             try {
-                const getServiceAccountResponse = await fetch(`${BASE_URL}/${API_VERSION}/service-accounts/${activePlatform}/`, {
+                const getServiceAccountResponse = await fetch(`${BASE_URL}/${API_VERSION}/service-accounts/${activePlatform}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -97,7 +95,11 @@ const AddGroup = () => {
                 if (getServiceAccountResponse.ok) {
                     const accountData = await getServiceAccountResponse.json();
                     setServiceAccount(accountData);
-                } else {
+                }
+                else if (getServiceAccountResponse.status === 404) {
+                    setServiceAccount(null);
+                }
+                else {
                     throw new Error(await getServiceAccountResponse.text());
                 }
             } catch (err) {
@@ -107,7 +109,7 @@ const AddGroup = () => {
             }
         }
         fetchServiceAccounts();
-    }, [activePlatform]);
+    }, [activePlatform, navigate]);
 
 
     let groupStatus, groupStatusStyle;
@@ -157,7 +159,7 @@ const AddGroup = () => {
                 })
             });
             if (res.status === 201) {
-                navigate("/profile");
+                navigate("/profile?tab=groups");
             } else {
                 const data = await res.text();
                 await sendForDebug(data);
@@ -183,7 +185,7 @@ const AddGroup = () => {
             </section>
 
             {/* Блок 2: Информация об аккаунтах */}
-            {activePlatform && <section className={styles.section}>
+            {activePlatform && (serviceAccount ? <section className={styles.section}>
                 <h2>Информация об аккаунтах</h2>
                 <AccountInfo
                     platform={platforms.find(p => p.alias === activePlatform)}
@@ -194,7 +196,7 @@ const AddGroup = () => {
                     setGroupData={setGroupData}
                 />
             </section>
-            }
+             : <h3>Не найден сервисный аккаунт для платформы, обратитесь к администратору</h3>)}
             {groupData && <section className={styles.section}>
                 <h2>Данные о группе</h2>
                 <div className={styles.groupData}>
