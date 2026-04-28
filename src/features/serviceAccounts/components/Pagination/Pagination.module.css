@@ -1,0 +1,38 @@
+.paginationContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.8rem;
+    margin-top: 1rem;
+    padding: 0.8rem;
+}
+
+.btn {
+    padding: 0.4rem 0.6rem;
+    background: none;
+    color: #2c5aa0;
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.3s, opacity 0.3s;
+}
+
+.btn:hover:not(:disabled) {
+    color: #1e4275;
+}
+
+.btn:disabled {
+    color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.pageInfo {
+    font-weight: 600;
+    color: #333;
+    font-size: 0.9rem;
+    min-width: 40px;
+    text-align: center;
+}
+
