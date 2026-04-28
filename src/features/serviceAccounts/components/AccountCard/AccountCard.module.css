@@ -1,0 +1,201 @@
+.accountCard {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1rem;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    transition: box-shadow 0.3s;
+}
+
+.accountCard:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.accountCard:last-child {
+    margin-bottom: 0;
+}
+
+.accountName {
+    font-weight: 600;
+    color: #333;
+}
+
+.accountGroups {
+    color: #666;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.accountLoad {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    min-width: 120px;
+}
+
+.loadPercentage {
+    font-weight: 600;
+    font-size: 0.9rem;
+    min-width: 35px;
+}
+
+.loadPercentage.loadLow {
+    color: #28a745;
+}
+
+.loadPercentage.loadMedium {
+    color: #ffc107;
+}
+
+.loadPercentage.loadHigh {
+    color: #dc3545;
+}
+
+.loadBar {
+    flex: 1;
+    height: 6px;
+    background: #e9ecef;
+    border-radius: 3px;
+    overflow: hidden;
+    min-width: 80px;
+}
+
+.loadFill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s;
+}
+
+.loadFill.loadLow {
+    background: #28a745;
+}
+
+.loadFill.loadMedium {
+    background: #ffc107;
+}
+
+.loadFill.loadHigh {
+    background: #dc3545;
+}
+
+.accountInfo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 140px;
+}
+
+.accountName {
+    font-weight: 600;
+    color: #333;
+}
+
+.accountGroups {
+    color: #666;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.accountLoad {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    min-width: 120px;
+}
+
+.loadPercentage {
+    font-weight: 600;
+    font-size: 0.9rem;
+    min-width: 35px;
+}
+
+.loadPercentage.loadLow {
+    color: #28a745;
+}
+
+.loadPercentage.loadMedium {
+    color: #ffc107;
+}
+
+.loadPercentage.loadHigh {
+    color: #dc3545;
+}
+
+.loadBar {
+    flex: 1;
+    height: 6px;
+    background: #e9ecef;
+    border-radius: 3px;
+    overflow: hidden;
+    min-width: 80px;
+}
+
+.loadFill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s;
+}
+
+.loadFill.loadLow {
+    background: #28a745;
+}
+
+.loadFill.loadMedium {
+    background: #ffc107;
+}
+
+.loadFill.loadHigh {
+    background: #dc3545;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-left: auto;
+}
+
+.actionLink {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 0.85rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color 0.2s;
+}
+
+.activateLink {
+    color: #666;
+    text-decoration: underline;
+}
+
+.activateLink:hover {
+    color: #28a745;
+}
+
+.deleteLink {
+    color: #999;
+}
+
+.deleteLink:hover {
+    color: #dc3545;
+}
+
+.statusActive {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: #28a745;
+    font-size: 0.85rem;
+}
+
+.notActivated {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: #999;
+    font-size: 0.85rem;
+}
