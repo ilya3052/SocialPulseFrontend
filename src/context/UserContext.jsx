@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { API_VERSION, BASE_URL } from "../utils/utils.js";
+import {API_VERSION, BASE_URL, verifyAndRefreshToken} from "../utils/utils.js";
 
 export const UserContext = createContext(null);
 
@@ -9,11 +9,20 @@ export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
+
+
     const fetchUser = async () => {
         setLoading(true);
-
+        const getUserData = async (token) => {
+            return await fetch(`${BASE_URL}/${API_VERSION}/users/me/`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                },
+            });
+        }
         try {
-            const token = localStorage.getItem("access_token");
+            let token = localStorage.getItem("access_token");
 
             if (!token) {
                 setUser(null);
@@ -21,17 +30,16 @@ export const UserProvider = ({ children }) => {
                 return;
             }
 
-            const res = await fetch(`${BASE_URL}/${API_VERSION}/users/me/`, {
-                method: "GET",
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                },
-            });
+            let res = await getUserData(token);
 
-            if (!res.ok) {
-                setUser(null);
-                setLoading(false);
-                return;
+            if (res.status === 401) {
+                if (!(await verifyAndRefreshToken())) {
+                    setUser(null);
+                    setLoading(false);
+                    return;
+                }
+                token = localStorage.getItem("access_token");
+                res = await getUserData(token);
             }
 
             const data = await res.json();
