@@ -23,8 +23,7 @@ const SummaryInfo = () => {
                     }
                     return;
                 }
-                const params = new URLSearchParams({exclude_fields: 'user_id,user,platform_id,service_account_id'});
-                const res = await fetch(`${BASE_URL}/${API_VERSION}/social-entities/groups/?${params}`, {
+                const res = await fetch(`${BASE_URL}/${API_VERSION}/social-entities/groups/?exclude_fields=user_id,user,platform_id,service_account_id`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -38,6 +37,7 @@ const SummaryInfo = () => {
                     return
                 }
                 const data = await res.json();
+                console.log(data);
                 setGroupsData(data);
             }
             catch (e) {
