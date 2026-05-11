@@ -25,11 +25,18 @@ const PersonalTab = () => {
         vk_link: ""
     }
 
+    const DATA_TO_EDIT = {
+        first_name: "",
+        last_name: "",
+        username: "",
+        email: "",
+    }
+
     const [hasPassword, setHasPassword] = useState(false);
 
     const [personalData, setPersonalData] = useState(INITIAL_PERSONAL_FORM_STATE);
 
-    const [editData, setEditData] = useState(personalData);
+    const [editData, setEditData] = useState(DATA_TO_EDIT);
 
     // Режим редактирования
     const [isEditing, setIsEditing] = useState(false);
