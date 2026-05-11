@@ -141,7 +141,12 @@ const PersonalTab = () => {
         switch (type) {
             case "personal":
                 url = `${BASE_URL}/${API_VERSION}/users/me/`;
-                dataToEdit = editData;
+                dataToEdit = {
+                    first_name: editData.first_name,
+                    last_name: editData.last_name,
+                    username: editData.username,
+                    email: editData.email,
+                };
                 break;
             case "change-password":
                 url = `${BASE_URL}/${API_VERSION}/users/change-password/`;
