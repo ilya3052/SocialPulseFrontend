@@ -23,7 +23,7 @@ const SummaryInfo = () => {
                     }
                     return;
                 }
-                const res = await fetch(`${BASE_URL}/${API_VERSION}/social-entities/groups/?exclude_fields=user_id,user,platform_id,service_account_id`, {
+                const res = await fetch(`${BASE_URL}/${API_VERSION}/social-entities/groups/?exclude_fields=users_ids,users,platform_id,service_account_id`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
