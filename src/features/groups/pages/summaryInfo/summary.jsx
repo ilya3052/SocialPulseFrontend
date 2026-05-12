@@ -12,55 +12,87 @@ const SummaryInfo = () => {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchGroups = async () => {
-            try {
-                let token = localStorage.getItem("access_token");
-                if (!token) {
-                    if (!(await verifyAndRefreshToken())) {
-                        navigate("/login");
-                        return;
-                    }
-                    return;
-                }
-                const res = await fetch(`${BASE_URL}/${API_VERSION}/social-entities/groups/?exclude_fields=users_ids,users,platform_id,service_account_id`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        "Authorization": `Bearer ${token}`
-                    }
-                });
-                if (!res.ok) {
-                    const err = await res.text();
-                    console.log(err);
-                    await sendForDebug(err);
-                    return
-                }
-                const data = await res.json();
-                console.log(data);
-                setGroupsData(data);
+    const [platform, setPlatform] = useState("ALL");
+    const [minParticipants, setMinParticipants] = useState(-1);
+    const [maxParticipants, setMaxParticipants] = useState(-1);
+    const [sortBy, setSortBy] = useState("subscribers_desc");
+    const [searchQuery, setSearchQuery] = useState("");
+    
+    const fetchGroups = async (filters) => {
+        let token = localStorage.getItem("access_token");
+        if (!token) {
+            if (!(await verifyAndRefreshToken())) {
+                navigate("/login");
+                return;
             }
-            catch (e) {
-                await sendForDebug(e);
-                console.log(e);
-            }
+            return;
         }
-        fetchGroups();
+        let url = `${BASE_URL}/${API_VERSION}/social-entities/groups/?exclude_fields=users_ids,users,platform_id,service_account_id`;
+        if (filters) {
+            url = url.concat('&').concat(filters.toString())
+        }
+        console.log(url);
+        const res = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${token}`
+            }
+        });
+        if (!res.ok) {
+            const err = await res.text();
+            console.log(err);
+            await sendForDebug(err);
+            return
+        }
+        const data = await res.json();
+        console.log(data);
+        return data;
+    }
+
+    useEffect(() => {
+        fetchGroups().then(
+            data => {setGroupsData(data)}
+        ).catch(
+            e => console.log(e)
+        );
     }, [navigate]);
+
+    const handleSearch = () => {
+        const filters = new URLSearchParams();
+        console.log(platform)
+        if (platform !== "ALL") filters.append("platform", platform);
+        if (minParticipants && minParticipants > -1) filters.append("min_participants", minParticipants);
+        if (maxParticipants && maxParticipants > -1) filters.append("max_participants", maxParticipants);
+        if (searchQuery && searchQuery.trim().length > 0) filters.append("q", searchQuery.trim());
+        let url = `${BASE_URL}/${API_VERSION}/social-entities/groups/?exclude_fields=users_ids,users,platform_id,service_account_id`;
+
+        console.log(url);
+        fetchGroups(filters.toString()).then(
+            data => {setGroupsData(data)}
+        ).catch(
+            e => console.log(e)
+        );
+    }
 
     return (
         <div className={styles.siteContainer}>
             <section className={styles.searchSection}>
                 <div className={styles.searchCompactRow}>
-                    <SearchFilters/>
-
+                    <SearchFilters setPlatform={setPlatform} setMinParticipants={setMinParticipants}
+                                   setMaxParticipants={setMaxParticipants} setSortBy={setSortBy}
+                                   platform={platform} sortBy={sortBy}
+                                   minParticipants={minParticipants > -1 ? minParticipants : ''}
+                                   maxParticipants={maxParticipants > -1 ? maxParticipants : ''}/>
+                    
                     <input
                         type="text"
                         className={styles.searchInput}
                         placeholder="Введите название группы или ключевые слова..."
+                        onChange={(e) => setSearchQuery(e.target.value)}
                     />
 
-                    <button className={styles.searchBtn}>Найти</button>
+                    <button className={styles.searchBtn} onClick={handleSearch}>Найти</button>
                 </div>
             </section>
 
