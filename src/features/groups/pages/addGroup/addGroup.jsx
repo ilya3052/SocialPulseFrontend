@@ -156,7 +156,7 @@ const AddGroup = () => {
                     service_account_id: serviceAccount.id,
                 })
             });
-            if (res.status === 201) {
+            if (res.ok) {
                 navigate("/profile?tab=groups");
             } else {
                 const data = await res.text();
