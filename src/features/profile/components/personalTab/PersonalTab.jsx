@@ -286,6 +286,58 @@ const PersonalTab = () => {
         }
     }
 
+    const handleUnbind = async (platform) => {
+        try {
+            const token = localStorage.getItem("access_token");
+            if (!token) {
+                if (!(await verifyAndRefreshToken())) {
+                    navigate("/login");
+                    return;
+                }
+            }
+            let data;
+            if (platform === 'tg') {
+                data = {
+                    tg_id: null,
+                    tg_link: null
+                }
+            }
+            else if (platform === 'vk') {
+                data = {
+                    vk_id: null,
+                    vk_link: null
+                }
+            }
+            console.log(data);
+            const res = await fetch(`${BASE_URL}/${API_VERSION}/users/me/`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
+                },
+                body: JSON.stringify(data)
+            });
+            if (res.ok) {
+                if (platform === 'tg') {
+                    setPersonalData(prev => ({...prev, tg_id: '', tg_link: ''}));
+                    localStorage.removeItem('tg_id');
+                } else if (platform === 'vk') {
+                    setPersonalData(prev => ({...prev, vk_id: '', vk_link: ''}));
+                    localStorage.removeItem('vk_id');
+                    localStorage.removeItem('vk_access_token');
+                    localStorage.removeItem('vk_refresh_token');
+                    localStorage.removeItem('vk_id_token');
+                }
+                window.location.reload();
+            } else {
+                const err = await res.text();
+                alert(err);
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
     const confirmEmail = async () => {
         try {
             let token = localStorage.getItem("access_token");
@@ -416,17 +468,23 @@ const PersonalTab = () => {
                 </form>
 
                 <div className={styles.platformStatus}>
-                    <div>
+                    <div className={styles.platformRow}>
                         <strong>TG:</strong>
                         <span>{personalData.tg_link || "Не привязано"}</span>
-                        {!personalData.tg_link &&
-                            <button onClick={handleTGBind} className={styles.linkPlatform}>Привязать</button>}
+                        {!personalData.tg_link ? (
+                            <button onClick={handleTGBind} className={styles.linkPlatform}>Привязать</button>
+                        ) : (
+                            <button onClick={() => handleUnbind('tg')} className={styles.unlinkPlatform}>Отвязать</button>
+                        )}
                     </div>
-                    <div>
+                    <div className={styles.platformRow}>
                         <strong>VK:</strong>
                         <span>{personalData.vk_link || "Не привязано"}</span>
-                        {!personalData.vk_link && <div id="vkAuth"></div>}
-                        {/*<button className={styles.linkPlatform}>Привязать</button>*/}
+                        {!personalData.vk_link ? (
+                            <div id="vkAuth"></div>
+                        ) : (
+                            <button onClick={() => handleUnbind('vk')} className={styles.unlinkPlatform}>Отвязать</button>
+                        )}
                     </div>
                 </div>
             </div>
